@@ -1,0 +1,336 @@
+LLM and Agent Safety
+
+LLM and agent safety is the research on stopping AI models from causing harm, and on checking whether they really behave well. For example, a coding agent told to make the tests pass may change the tests instead of fixing the bug. Safety researchers measure how often that happens, find out why, and build ways to stop it. LLM safety looks at what a model says. Agent safety also looks at what it does with tools, such as running code or sending email.
+
+The five branches
+Misbehaviour: Study models that cheat, deceive or turn bad, and find out what causes it. First paper: Emergent Misalignment.
+
+Interpretability: Look inside the model to find and change the numbers behind its behaviour. First paper: Persona Vectors.
+
+Monitoring and control: Catch bad actions by reading the model's reasoning, and keep it safe even if it cannot be trusted. First paper: Chain of Thought Monitorability.
+
+Agent safety: Build agents that stay safe when a web page or email tries to give them orders. First paper: CaMeL.
+
+Evaluations: Measure safety, and check that the score measures safety at all. First paper: Safety, or Just Capability?
+
+Words you will see
+Alignment: training a model so it does what people actually want.
+
+Emergent misalignment: a model trained on one narrow bad task starts behaving badly on unrelated topics.
+
+Reward hacking: getting a high score without doing the real task, such as editing the tests.
+
+Scheming: a model secretly pursues a goal and hides that from the people overseeing it.
+
+Sandbagging: a model does worse on purpose, for example during a test of its abilities.
+
+Evaluation awareness: a model notices that it is being tested.
+
+Chain of thought: the written reasoning a model produces before its answer.
+
+Monitor: a second program, often another model, that watches an agent and flags bad actions.
+
+Control: keeping a system safe even if the model inside it is trying to cause harm.
+
+Prompt injection: orders hidden in a web page, email or file that an agent reads, which the agent may then obey.
+
+Attack success rate: the share of attacks that get the model to do the harmful thing.
+
+Model organism: a model trained on purpose to have a bad behaviour, so researchers can study that behaviour.
+
+Sparse autoencoder: a small network that splits a model's internal numbers into separate readable features.
+
+Steering: adding a vector to a model's internal numbers while it runs, to change how it behaves.
+
+Good papers to start with
+Emergent Misalignment (Feb 2025): A model finetuned to write insecure code then says humans should be enslaved by AI, on prompts that have nothing to do with code.
+
+Alignment Faking in Large Language Models (Dec 2024): Claude complied with harmful requests from free users 14% of the time and almost never for paid users, after being told that only free chats are used for training.
+
+Natural Emergent Misalignment from Reward Hacking in Production RL (Nov 2025): Models that learned to cheat in real training environments became misaligned, and normal safety training fixed chat behaviour but left it on agent tasks.
+
+Chain of Thought Monitorability (Jul 2025): Reading a model's reasoning is a useful way to catch misbehaviour, and this ability could be lost as training methods change.
+
+Persona Vectors (Jul 2025): Traits like evil, sycophancy and making things up each match a direction inside the model that you can measure and control.
+
+The Attacker Moves Second (Oct 2025): Attackers who adapted to each defense broke 12 recent defenses, most above 90% success, though most of those defenses had reported near-zero attack success.
+
+CaMeL: Defeating Prompt Injections by Design (Mar 2025): Separating trusted orders from untrusted data solved 77% of tasks with provable security, compared with 84% for an undefended system.
+
+Safety, or Just Capability? (Jul 2026): Three broad agent safety benchmarks rank the same 18 models differently, and a policy that always answers yes beats five of 21 real models on a fourth.
+
+Surveys for looking things up
+International AI Safety Report 2026 (Feb 2026): A review of the evidence on general-purpose AI by over 100 experts, with representatives nominated by 29 nations, the UN, the OECD and the EU.
+
+An Approach to Technical AGI Safety and Security (Apr 2025): Google DeepMind's plan, which trains an aligned model first and then adds monitoring and access control in case it is misaligned anyway.
+
+Reward Hacking in the Era of Large Models (Apr 2026): A survey that explains reward hacking as what happens when a powerful model optimises a score that only roughly captures what people want.
+
+Open Problems in Mechanistic Interpretability (Jan 2025): A review of what interpretability methods can do today and which problems the field should work on next.
+
+Architecting Secure AI Agents (Mar 2026): A position paper on defending agents through system design, and on how current benchmarks can give a false sense of security.
+
+Math for AI Safety (Sep 2026): A guide organised by field of mathematics, where each section ends with an open problem that needs no AI safety background.
+
+Results in this lesson are the numbers each paper's authors report; they have not been rerun here. Links were checked against arXiv on November 2, 2026.
+
+Foundations: papers everyone cites
+Concrete Problems in AI Safety (Jun 2016): The paper that turned accident risk into research problems, including reward hacking and unsafe exploration.
+
+Risks from Learned Optimization (Jun 2019): A trained model can become an optimiser with its own goal, and that goal may differ from the one it was trained on.
+
+Unsolved Problems in ML Safety (Sep 2021): Sorts safety work into four areas: robustness, monitoring, alignment and systemic safety.
+
+InstructGPT (Mar 2022): Trains a language model to follow instructions using human feedback, the method now called RLHF.
+
+Constitutional AI (Dec 2022): Trains a model to be harmless using a list of written principles, with no human labels for harmful outputs.
+
+Weak-to-Strong Generalization (Dec 2023): Tests whether a weak supervisor can train a stronger model, as a stand-in for humans supervising AI smarter than them.
+
+Sleeper Agents (Jan 2024): Backdoors trained into a model survive standard safety training.
+
+Safety Alignment Should Be Made More Than Just a Few Tokens Deep (Jun 2024): Safety training mostly changes the first few words of an answer, which is why it breaks so easily.
+
+Fine-tuning Compromises Safety (Oct 2023): Finetuning a safety-trained model can weaken its safety, even when the training data is harmless.
+
+Towards Understanding Sycophancy (Oct 2023): Models trained on human feedback tend to tell people what they want to hear instead of what is true.
+
+Sycophancy to Subterfuge (Jun 2024): Models trained to cheat in easy ways sometimes move on to worse cheating, including editing their own reward.
+
+Deliberative Alignment (Dec 2024): Teaches a reasoning model to think through written safety rules, which improves robustness and reduces needless refusals together.
+
+Circuit Breakers (Jun 2024): Interrupts the internal signals behind harmful outputs, instead of training the model to refuse.
+
+Constitutional Classifiers (Jan 2025): Classifiers trained on synthetic data block universal jailbreaks with 0.38% extra refusals and 23.7% extra compute.
+
+Misbehaviour
+Bad behaviour that spreads
+Evil Spectra (Jun 2026): The choice of optimiser had the largest effect on emergent misalignment, a 7x spread, while model size had almost none.
+
+Emergent Misalignment Is Easy, Narrow Misalignment Is Hard (Feb 2026): Models can learn just the narrow task, but the general bad behaviour reaches lower loss and is more stable.
+
+Emergent Misalignment Is Not Magical (Aug 2026): The closer a prompt sits to the training data inside the model, the more evil the answer, with a correlation of -0.73 across 12 settings.
+
+Conditional Misalignment (Apr 2026): Common fixes can hide misalignment instead of removing it, since a model trained on only 5% insecure code still misbehaves when the prompt looks like code.
+
+RL Can Amplify Emergent Misalignment (May 2026): Reinforcement learning produced more general misalignment than finetuning on the same number of samples, in small open models.
+
+Inoculation Prompting (Oct 2025): Asking for the bad trait on purpose during training makes the model show it much less at test time.
+
+Subliminal Learning (Jul 2025): A student model picked up a teacher's trait from plain number sequences, but only when both shared the same base model.
+
+Do Emergent Misalignment Models Share a Circuit? (Oct 2026): Changing five attention heads cut misalignment from 50.7% to 12.5% on finance and from 41.7% to 11.1% on sports.
+
+Reward hacking
+Reward Hacking Benchmark (May 2026): Exploit rates ran from 0% for Claude Sonnet 4.5 to 13.9% for DeepSeek-R1-Zero, and simple changes to the environment cut them by 87.7%.
+
+SpecBench (May 2026): Compares visible and held-out tests on 30 long coding tasks, and one agent wrote a 2,900-line hash table that memorised test inputs and called it a compiler.
+
+Hack-Verifiable Environments (May 2026): Builds detectable cheating chances into the environment, so cheating is measured automatically without reading transcripts.
+
+LLMs Gaming Verifiers (Apr 2026): Models trained against automatic answer checkers learned to list labels instead of learning the rule, and a stricter checker removed the shortcut.
+
+Reward Hacking as a Transmissible Strategy (Oct 2026): A cheating strategy spreads between coding agents through shared code, memory and plans, even from small open models into stronger closed ones.
+
+Scheming and deception
+Frontier Models Are Capable of In-Context Scheming (Dec 2024): Five frontier models schemed when given a strong goal, and o1 kept up the deception in over 85% of follow-up questions.
+
+Agentic Misalignment (Oct 2025): Tested in hypothetical company settings, 16 leading models sometimes chose blackmail or leaking information to avoid replacement or reach their goal.
+
+Stress Testing Anti-Scheming Training (Sep 2025): Training cut covert actions in o3 from 13% to 0.4% without removing them, and noticing the test also lowers covert behaviour.
+
+SchemeArena (Sep 2026): A 400-scenario benchmark that varies one factor at a time, and finds explicit instrumental goals are the strongest driver of scheming.
+
+Value-Conflict Diagnostics (Apr 2026): Using morally clear scenarios, alignment faking appears in models as small as 7B parameters, 37% of the time in olmo2-7b-instruct.
+
+Propensities Please (Oct 2026): Teaches a model through synthetic documents that bad actions will go unseen, which exposes hidden behaviour without relying on its reasoning.
+
+Gram (May 2026): Gemini models misbehaved in about 2-3% of simulated runs, and more realistic environments brought sabotage close to zero.
+
+Would AI Models Sabotage AI Safety Research? (Apr 2026): Four Claude models never started sabotage on their own, but when placed mid-sabotage Mythos Preview continued it in 7% of cases.
+
+Sandbagging and hidden goals
+AI Sandbagging (Jun 2024): Models can be prompted or password-locked to underperform on ability tests, which makes those tests less trustworthy.
+
+Auditing Games for Sandbagging (Dec 2025): A red team builds models that hide their ability and a blue team tries to catch them, and the model organisms are open source.
+
+Removing Sandbagging by Training with Weak Supervision (Apr 2026): Finetuning on weak examples breaks sandbagging and reinforcement learning then recovers full performance, while neither works reliably alone.
+
+A Causal Model of Sandbagging (Aug 2026): Grafting a single layer recovered the hidden ability in 28 of 33 runs, with median recovery of 96%.
+
+Auditing Language Models for Hidden Objectives (Mar 2025): Three of four blind teams found a hidden goal planted in a model, using sparse autoencoders, behaviour tests and training data analysis.
+
+Most Current Model Organisms Are Leaky (May 2026): Comparing a finetuned model with its earlier checkpoint reveals what it was trained for in the vast majority of model organisms.
+
+Did You Lie? (Jun 2026): Detectors built on internal numbers or output probabilities drop sharply on trained liars, and only a judge that reads the reasoning stays strong, at 0.82 balanced accuracy.
+
+Models that know they are being tested
+Large Language Models Often Know When They Are Being Evaluated (May 2025): Tested on 1,000 prompts from 61 datasets, frontier models far outperform chance at telling tests from real use.
+
+Evaluation Awareness Has Limited Effect on Behaviour (May 2026): Adding or removing sentences about being tested from the reasoning of open models changed their behaviour very little.
+
+Evaluation Awareness Is Not One Capability (Jun 2026): Across 37 open models, framing changes moved compliance by up to 30 points, and the different kinds of awareness barely correlate.
+
+Steering Evaluation-Aware Models (Oct 2025): A steering vector made a test-aware model behave during tests the way it behaves in real use.
+
+LURE (Apr 2026): Builds tests by replaying real usage, which models find harder to tell apart from deployment.
+
+Interpretability
+Finding features
+Sparse Autoencoders Find Highly Interpretable Features (Sep 2023): Sparse autoencoders split a model's internal numbers into features that people can read more easily.
+
+Scaling and Evaluating Sparse Autoencoders (Jun 2024): Shows how to train much larger sparse autoencoders and measure whether they work.
+
+Gemma Scope (Aug 2024): Free sparse autoencoder weights for Gemma 2 models, so you can start without training your own.
+
+Transcoders (Jun 2024): A variant of sparse autoencoders that helps trace which features cause which others.
+
+Finding and changing directions
+Representation Engineering (Oct 2023): Reads and changes traits like honesty by working on a model's internal representations.
+
+Refusal Is Mediated by a Single Direction (Jun 2024): Across 13 chat models up to 72B parameters, refusal depends on a single direction inside the model.
+
+Contrastive Activation Addition (Dec 2023): Builds a steering vector from the difference between pairs of opposite examples.
+
+Persona Features Control Emergent Misalignment (Jun 2025): Comparing a model before and after finetuning reveals a toxic persona feature that most strongly controls the misalignment.
+
+The Sharp Directions Are Against You (Oct 2026): Removing a small part of a steering vector keeps cosine above 0.974 and cuts curvature by up to 12x, which explains why steering can be fragile.
+
+BLOCK-EM (Jan 2026): Discouraging a few internal features from growing during finetuning reduced emergent misalignment by up to 95%, with no loss of quality.
+
+Checking whether it works
+The Misery of Mechanistic Interpretability (Sep 2026): Small input changes flip the features found in five open model families, and the paper proposes a way to verify them formally.
+
+Are We Recovering Mechanisms? (Oct 2026): The standard test of a circuit prefers the worse of two candidates in 13.2%-24.4% of pairs.
+
+When Do Model Internals Help? (Sep 2026): A matched comparison found that behaviour training (DPO) gives the strongest control and text monitors are the most accurate, while probes compete at lower cost.
+
+The Story Is Not the Science (Feb 2026): An agent that reruns interpretability research agreed with human judges above 80% of the time and found 51 more issues they missed.
+
+What Do SAE Feature Discovery Scores Identify? (Oct 2026): Gradient-based choices predicted the direction of an edit in 91-97% of cases, compared with 17-35% for probes.
+
+Monitoring and control
+Reading the model's reasoning
+Monitoring Reasoning Models for Misbehavior (Mar 2025): GPT-4o can catch a stronger model cheating by reading its reasoning, but training against the monitor teaches the model to hide its intent.
+
+Reasoning Models Don't Always Say What They Think (May 2025): Models used hints in the prompt and often mentioned them in under 20% of those cases.
+
+Monitoring Monitorability (Dec 2025): Longer reasoning is easier to monitor, and reinforcement learning did not materially reduce monitorability at frontier scale.
+
+Can Reasoning Models Obfuscate Reasoning? (Oct 2025): Under strong pressure some models completed hidden tasks while evading the monitor, though they hide their internal reasoning less than their visible reasoning.
+
+A Pragmatic Way to Measure Monitorability (Oct 2025): Gives a ready-made prompt that lets any capable model score reasoning for legibility and coverage.
+
+Monitorability Is Trainable (Oct 2026): A post-training objective that links reasoning to output recovered most or all of the lost monitorability in three model organisms.
+
+Reward Misspecification Degrades Monitorability (Oct 2026): Telling the model about the flawed reward during training improved monitorability by an average of 24% or 42% absolute, depending on the metric.
+
+Faithful yet Collusive (Sep 2026): In pricing games, the most faithful reasoner still kept prices above the competitive level, so reading reasoning alone cannot catch collusion.
+
+Control: staying safe with a model you do not trust
+AI Control (Dec 2023): Uses a weak trusted model and a little human review to get safe work from a strong untrusted model.
+
+SHADE-Arena (Jun 2025): Pairs normal tasks with hidden harmful ones, and the best model completed both undetected only 27% of the time.
+
+Adaptive Attacks on Trusted Monitors (Oct 2025): Models that put prompt injections in their own outputs evaded monitors on two main control benchmarks, so the monitor can be the weak point.
+
+Attack Selection (Feb 2026): When the attacker picks its moment, safety fell from 99% to 59% at a 0.5% audit budget.
+
+Attack Selection in Agentic Control Evaluations (Jun 2026): A policy that stops when the attack looks risky reduced safety by 20 points on BashArena and 28 points on LinuxArena.
+
+Simple Features Beat Most AI Control Monitors (Oct 2026): Simple code features outranked 20 of 24 monitors on a standard dataset, and one in seven of its backdoors failed validity checks.
+
+How Does Information Access Affect Monitors? (Jan 2026): Monitors often do better with less information, so one model picks out excerpts and another scores them.
+
+Coding with Enemy (Jun 2026): In a roughly five-hour coding task, 83 of 88 developers without a monitor failed to notice that the AI was sabotaging their work.
+
+Control OSWorld (Oct 2026): A control test with 318 computer-use tasks, where a monitor seeing the whole run reached 97% recall at a 3% false positive rate.
+
+Agent safety
+Defending against prompt injection
+The Instruction Hierarchy (Apr 2024): Trains a model to give priority to system messages over text it finds in tools or user input.
+
+Design Patterns for Securing LLM Agents (Jun 2025): A set of ways to build agents so that untrusted text cannot trigger harmful actions.
+
+Security-Fidelity Tradeoffs (Jun 2026): Across 1,168 examples and 48 setups, no model or defense both stopped attacks and kept the benign content, because some defenses simply delete it.
+
+PlanGuard (Apr 2026): Reduced attack success from 72.8% to 0% with a 1.49% false positive rate.
+
+Privilege Separation in OpenClaw (Mar 2026): Isolating agents alone brought attack success down to 0.31%, and the full pipeline reached 0%.
+
+RETA (Jun 2026): Trains a defense to judge whether each embedded instruction fits the user's task, instead of matching known attack patterns.
+
+Safety beyond refusing
+Agent Safety Is Action Alignment (Jun 2026): Argues that refusal fits harmful text, but agent harm lies in the authority an action uses, so it needs a different approach.
+
+Agent Safety Should Be a Runtime Contract (Aug 2026): Argues that the software around the model should block dangerous actions and demand proof that the good ones happened.
+
+Says Block, Still Acts (Sep 2026): Studies why an agent can judge an action unsafe and take it anyway, across three open models.
+
+Tool Specifications Matter (Jul 2026): Fixing unsafe tool descriptions raised refusal of harmful requests from 23.8% to 70.6% and cut prompt injection success from 25.6% to 2.5%.
+
+Evaluations
+Benchmarks
+AgentDojo (Jun 2024): A prompt injection test with 97 realistic tasks and 629 security test cases, and the code is easy to run.
+
+AgentHarm (Oct 2024): Measures whether agents carry out malicious multi-step tasks, and finds leading models comply surprisingly often even without a jailbreak.
+
+Agent-SafetyBench (Dec 2024): With 349 environments and 2,000 tests, none of 16 agents scored above 60% on safety.
+
+OS-Harm (Jun 2025): Tests computer-use agents, and all models tend to comply directly with many deliberate misuse requests.
+
+ToolEmu (Sep 2023): Uses a language model to simulate tools, and even the safest agent failed 23.9% of the time.
+
+HarmBench (Feb 2024): A standard way to compare 18 attack methods against 33 models and defenses.
+
+Measuring AI Ability to Complete Long Software Tasks (Mar 2025): Measures AI ability by the length of task it can finish, and extrapolates that within 5 years AI could automate many month-long software tasks if the trend holds.
+
+V3AST-Bench (Oct 2026): Checks real outcomes on 212 risky coding tasks, and Claude Opus 4.8 with Claude Code still caused verified harm on 20.9% of them.
+
+SABER (May 2026): Tests coding agents on real project state, and even the best model had a harmful violation rate above 54%.
+
+OSGuard (Jun 2026): 37.8% of runs ended in an unsafe completion, and the strongest guardrail only reduced that to 33.3%.
+
+Can you trust the score?
+A Taxonomy of Agent Safety Evaluation (Apr 2026): Reviews the field and shows that the choice of benchmark can lead to contradictory safety conclusions.
+
+Shortcut Sensitivity in Agent-Safety Evaluations (Oct 2026): Small edits to how a benchmark is written changed a guard model's decisions and its measured accuracy.
+
+AgentDyn (Feb 2026): Finds three flaws in current agent security benchmarks, and adds dynamic open-ended tasks to test defenses in more realistic settings.
+
+Start your first project
+Code you can run
+Inspect: The UK AI Security Institute's framework for writing tests of language models, with over 200 ready-made tests.
+
+ControlArena: A library for testing safeguards that should stop unsafe actions even when the AI is trying to get around them.
+
+AgentDojo: A test environment that attacks AI agents with hidden instructions, called prompt injection, and measures how well defenses hold.
+
+CaMeL: Research code for a defense against prompt injection, and the authors warn that it may contain bugs and may not be fully secure.
+
+Emergent Misalignment: The datasets and evaluation questions from the paper showing that training a model on one narrow task can make it misbehave broadly.
+
+Persona Vectors: Finds the signal inside a model that stands for a character trait, so you can watch and change that trait.
+
+Refusal Direction: Reproduces the finding that a model's refusals are controlled by one direction inside it, and the repository contains offensive text.
+
+Sandbagging Auditing Games: Models built to hide their abilities on purpose, plus tools for trying out ways to catch them.
+
+Hack-Verifiable Environments: Test environments built so you can check whether a model cheated to get its reward.
+
+TransformerLens: A library for looking inside a language model to see what each part is doing.
+
+SAELens: A library for training and studying sparse autoencoders, which split a model's internal signals into more readable features.
+
+Petri: An auditing agent that holds long test conversations with a target model to find problems such as reward hacking.
+
+Some questions for inspiration
+Does the optimiser change emergent misalignment on another model?: Repeat the Evil Spectra sweep on a family it did not test, and report whether the 7x spread holds.
+
+Do simple features beat monitors on another dataset?: Run the same simple code features on a different backdoor dataset, and see if the monitors win there.
+
+Does removing sharp directions help steering on a small model?: Take a small open model, remove the sharp part of a steering vector, and measure how often behaviour moves the wrong way.
+
+Do two agent safety benchmarks rank models the same way?: Run the same few models through two benchmarks and compare the two rankings.
+
+Can comparing checkpoints reveal a finetune on a small model?: Finetune a small model on a hidden behaviour, then see if the perplexity method finds it.

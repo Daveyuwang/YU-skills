@@ -1,0 +1,300 @@
+World Models
+
+A world model is a neural network that predicts what happens next after an action. For example, it sees a robot arm and the command "move left", then predicts the next moment. An agent can test actions inside this prediction before it acts in the real world.
+
+The four branches
+Latent planning: Predict a short summary of the next moment, then search for actions that reach a goal. First paper: LeWorldModel.
+
+Interactive video: Generate video that reacts to keyboard and camera input, like a game. First paper: Matrix-Game 2.0.
+
+Robot learning: Use predicted video to test and improve robot controllers. First paper: Ctrl-World.
+
+Evaluation: Measure whether a world model helps with real tasks, beyond looking good. First paper: WorldArena.
+
+Words you will see
+Latent: the short list of numbers a model uses to describe what it sees.
+
+JEPA: a model that predicts the next latent instead of the next pixels.
+
+Rollout: a chain of predictions, each one built on the previous one.
+
+Planning: trying many action sequences inside the world model and keeping the best one.
+
+Collapse: a training failure where every input gets the same latent.
+
+Policy: the part of an agent that chooses its actions.
+
+World action model: one model that predicts future video and also outputs robot actions.
+
+Good papers to start with
+An Introduction to World Models for Generalist Agents (Oct 2026): Explains what a world model is and how the different approaches connect, starting from the basics.
+
+World Models (Mar 2018): An agent learns a compressed dream of a game, then learns to act inside that dream.
+
+Dreamer 4 (Sep 2025): The first agent to get diamonds in Minecraft from recorded data alone, by practising inside its world model.
+
+LeWorldModel (Mar 2026): A 15M-parameter JEPA trains from raw pixels on one GPU in a few hours and avoids collapse with only two loss terms.
+
+One-Step Prediction Fidelity Is a Poor Proxy for Planning Performance (Oct 2026): Better next-step prediction stopped predicting better planning after the first training epoch (r = -0.010 across the next 15 checkpoints).
+
+Surveys for looking things up
+Agentic World Modeling (Apr 2026): Sorts over 400 works by what the model can do and which laws its world follows: physical, digital, social or scientific.
+
+World Models: A Comprehensive Survey (May 2026): Reviews architectures and uses across reinforcement learning, robots, driving and video.
+
+World Model for Robot Learning (Apr 2026): Reviews how robots use world models for policy learning, planning, simulation and evaluation.
+
+From World Models to World Action Models (Jul 2026): A short robotics tutorial comparing World Labs, JEPA and NVIDIA Cosmos.
+
+Latent State Design for World Models (May 2026): Groups methods by what their latent is for, and argues the best latent matches the task instead of keeping the most information.
+
+Video Generation Models as World Models (Mar 2026): Reviews how to make video generators cheap enough to work as world simulators.
+
+Latent World Models for Automated Driving (Mar 2026): Organizes driving world models around how they use latents and lists open challenges.
+
+Results in this lesson are the numbers each paper's authors report; they have not been rerun here. Links were checked against arXiv on November 2, 2026. A longer list of papers: https://github.com/NeuraLiying/Awesome-World-Models
+
+Foundations: papers everyone cites
+These older papers explain the words and baselines used in almost every recent paper. They are in date order.
+
+World Models (Mar 2018): An agent learns a compressed dream of a game, then learns to act inside that dream.
+
+PlaNet (Nov 2018): Learns dynamics from pixels and chooses actions by planning in latent space, with no policy network.
+
+MuZero (Nov 2019): Predicts only what planning needs, and masters Atari, Go, chess and shogi without being given the rules.
+
+Dreamer (Dec 2019): Learns behavior purely from rollouts imagined in latent space.
+
+DreamerV2 (Oct 2020): Discrete latents let an agent trained inside its world model reach human-level Atari.
+
+IRIS (Sep 2022): A transformer world model learns Atari games from about two hours of play.
+
+DreamerV3 (Jan 2023): One fixed set of settings solves over 150 tasks across very different domains.
+
+I-JEPA (Jan 2023): Predicts the latent of hidden image patches instead of their pixels.
+
+GAIA-1 (Sep 2023): Generates realistic driving video from video, text and action inputs.
+
+TD-MPC2 (Oct 2023): A world model with no pixel decoder plans across 104 continuous control tasks with one set of settings.
+
+V-JEPA (Feb 2024): Learns from video alone by predicting the latent of hidden parts of the video.
+
+Genie (Feb 2024): Learns a playable environment from internet videos that have no action labels.
+
+DIAMOND (May 2024): Uses a diffusion model as the world model and shows that keeping visual details raises Atari scores.
+
+GameNGen (Aug 2024): A diffusion model generates a playable game at 20 frames per second from past frames and actions.
+
+DINO-WM (Nov 2024): Predicts future DINOv2 image features and plans toward image goals, with no pixel reconstruction and no rewards.
+
+Cosmos (Jan 2025): NVIDIA's platform of video world models and tools for physical AI.
+
+GAIA-2 (Mar 2025): Generates controllable driving video from several cameras at once.
+
+V-JEPA 2 (Jun 2025): Trains on over 1 million hours of internet video, then uses under 62 hours of robot video to plan pick-and-place on real arms.
+
+Dreamer 4 (Sep 2025): The first agent to get diamonds in Minecraft from recorded data alone, by practising inside its world model.
+
+Latent planning and JEPA
+The model predicts a short summary of the future, and a planner searches for actions that bring that summary close to a goal. This branch is the cheapest place to start, because the main models fit on one GPU.
+
+Training the model
+LeWorldModel (Mar 2026): A 15M-parameter JEPA trains from raw pixels on one GPU in a few hours and avoids collapse with only two loss terms.
+
+What Drives Success in Physical Planning (Dec 2025): Tests model, loss and planner choices one by one, then combines the best into a model that beats DINO-WM and V-JEPA 2-AC.
+
+V-JEPA 2.1 (Mar 2026): Applies the training loss to every patch and to several layers, which gives more detailed features and 20 more points of real-robot grasping success than V-JEPA 2-AC.
+
+Contrastive World Models (Aug 2026): Replaces Dreamer's pixel reconstruction with a contrastive loss, so distracting backgrounds hurt it less.
+
+MemWM (Oct 2026): Adds a memory bank to a JEPA and matches DINO-WM on four tasks with 4x fewer trainable parameters.
+
+LaLa-World (Oct 2026): Describes actions in plain language so one predictor can train across different robots, simulators and video datasets.
+
+What the latent should contain
+Spectral-Target Physical Latent Structuring (Sep 2026): LeWorldModel's latent can avoid collapse and still miss the physics in fast-moving tasks, and a small extra Fourier head during training fixes this.
+
+PSG-JEPA (Aug 2026): Adds training losses that make the latent reveal the robot's joint state, because forward prediction alone does not guarantee it.
+
+SWIM (Oct 2026): Finds which state features matter by checking which ones help predict recorded actions, then shapes the latent around them.
+
+Causal-JEPA (Feb 2026): Hides whole objects so the model must infer them from the others, and plans comparably with 1% of the latent features patch-based models use.
+
+Slot-JEPA (Oct 2026): Splits the image features into objects so the predictor does not have to rediscover objects itself.
+
+Inside-JEPA (Oct 2026): Adds channels for how pairs of objects relate, and finds that latent prediction alone teaches them nothing while predicting actions from their changes does.
+
+Why good prediction does not guarantee good planning
+One-Step Prediction Fidelity Is a Poor Proxy (Oct 2026): Better next-step prediction stopped predicting better planning after the first training epoch (r = -0.010 across the next 15 checkpoints).
+
+Understanding the Limits of Latent World Models (Oct 2026): Introduces a test of whether latent dynamics match the real environment, and finds that none of the tested models solve tasks by modeling it faithfully.
+
+D-JEPA (Sep 2026): A future predicted closer to the goal can turn out worse, so this model learns to rank candidate futures from their real outcomes.
+
+Plan with Distances Along the Latent Manifold (Oct 2026): Straight-line latent distance traps the planner, and using shortest paths on a neighbor graph lifts far-goal TwoRoom success from 27% to 95% with no retraining.
+
+Latent Projection for Latent Planning (Oct 2026): Computes the planning cost only in the latent directions the model can predict with the least uncertainty, with no change to the trained model.
+
+When More Planning Hurts (Oct 2026): Trains a tiny network to update actions, and finds that extra planning updates can lower the predicted cost while turning a success into a failure.
+
+Hierarchical World Models with Implicit Dynamics (Oct 2026): A high-level model picks reachable subgoals and a low-level model turns them into actions, a 135% gain over single-level planning.
+
+Optimistic Test-Time Adaptation (Oct 2026): Updates the model during use toward both correct predictions and reaching the goal, adding 13.5 points of success against 6.9 for prediction alone.
+
+Interactive video world models
+The model generates video one chunk at a time and reacts to keyboard, mouse or camera input. The main problems are speed, memory of places already visited, and accurate response to actions. Most of these models need much more GPU memory than the JEPA models above.
+
+Real-time systems
+Matrix-Game 2.0 (Aug 2025): An open-source model that generates video from keyboard and mouse input at 25 frames per second.
+
+Matrix-Game 3.0 (Apr 2026): Adds camera-aware memory and teaches the model to correct its own errors for long 720p real-time video.
+
+Matrix-Game 3.5 (Aug 2026): Retrieves stored 3D patches and models the still scene and moving subjects separately, so revisited places stay consistent.
+
+ABot-World-0 (Jul 2026): Streams 720p interactive video at up to 16 frames per second on one RTX 5090.
+
+BiWM (Jun 2026): An open-source framework that turns pretrained video generators into interactive world models in two stages.
+
+Solaris (Feb 2026): A multiplayer Minecraft world model that keeps each player's view consistent with the others.
+
+Mix Forcing (Oct 2026): Trains with both causal and bidirectional attention, so a real-time generator keeps the visual quality of the original video model.
+
+Long memory
+Context Forcing (Feb 2026): Trains a long-memory student with a long-memory teacher, reaching over 20 seconds of usable context.
+
+Infinite-World (Feb 2026): Compresses history into a fixed-size memory, which keeps worlds coherent for over 1,000 frames without camera poses.
+
+MosaicMem (Mar 2026): Stores image patches at 3D positions and reuses them when the camera looks at the same place again.
+
+GROME (Oct 2026): Stores the still scene and moving things separately, and adds this memory to existing models with no retraining.
+
+L3G-World (Oct 2026): Stores the scene as 3D Gaussians, so memory grows with the size of the place instead of the length of the video.
+
+Context Compaction for World Models (Oct 2026): Borrows context compaction from LLM agents, and lets models recall rooms up to 4x beyond their context window with no retraining.
+
+WorldPager (Oct 2026): Moves a world model's memory between GPU, RAM and SSD, so long sessions fit on one consumer GPU.
+
+3D worlds and rule engines
+PERSIST (Mar 2026): Simulates a latent 3D scene, camera and renderer instead of generating only from past pixels.
+
+AEON (Oct 2026): Turns video latents into renderable 4D Gaussians to combine the realism of video with the consistency of 3D.
+
+BoxWorld (Oct 2026): A coding agent writes a rules engine that tracks object boxes, and a video model draws the result.
+
+Autoencoders and datasets
+Video World Models Need Predictable Latents (Oct 2026): Training the latent to make the future easy to predict gives up to 5x cheaper inference and over 7x faster training.
+
+Rethinking Video Autoencoders (Oct 2026): Shows that compressing time is cheap when the camera is still and compressing space is cheap when it moves, so manipulation and navigation need opposite settings.
+
+Sekai2 (Aug 2026): A dataset of 2,826 hours of real-world video with camera paths, plus panoramic sequences that loop back and revisit places.
+
+GameVerse (Oct 2026): A dataset of 1,655 hours of gameplay, most of it in continuous two-minute sequences.
+
+Robots and world action models
+Here the world model serves a robot: it tests a controller in imagination, trains one, or doubles as the controller.
+
+Predicting what a robot's actions will do
+Ctrl-World (Oct 2025): A multi-camera model predicts over 20 seconds of robot video, which lets you rank and improve robot policies with fewer real runs.
+
+GigaWorld-1 (Jul 2026): Compares 7 video models against real robot runs and finds long, action-faithful rollouts matter more than short-term visual realism.
+
+DreamDojo (Feb 2026): Learns from 44k hours of first-person human video, then adapts to a target robot with a small amount of its data.
+
+RynnWorld-Latent (Oct 2026): Uses a shared action format so human videos, robot demos and simulation can train one model.
+
+UniAction (Oct 2026): Represents force, camera, hand and robot-pose actions in one format, and one jointly trained model beats the separate specialists.
+
+Action Influence Maximization (Oct 2026): Expert demos barely show what actions change, and adding 500 actively collected episodes to 3k demos matches 300k expert episodes on arm control.
+
+One model for prediction and action
+Cosmos Policy (Jan 2026): Fine-tunes a video model to output robot actions as extra latent frames, with no change to its architecture, and reaches 98.5% on LIBERO.
+
+LingBot-VA (Jan 2026): Predicts video and robot actions in one shared latent space.
+
+What Does World Modeling Actually Improve? (Oct 2026): Future-video prediction adds 24 and 73 points of success on seen tasks in two models, but the gain does not reliably survive changed conditions.
+
+CausalWAM (Oct 2026): Adds a sparse path to the action head, so actions depend only on the parts of the scene that cause them.
+
+GAWM (Oct 2026): A small world action model that predicts in the space of a frozen DINOv3 encoder, instead of using a billion-parameter backbone.
+
+Improving policies and planning on real hardware
+DRILL (Oct 2026): Trains the world model to improve the policy, which helps even with 17% higher next-frame pixel error.
+
+Rollback (Oct 2026): Rewinds to key moments in the world model, tries other actions there, and learns which decisions caused success.
+
+DUET-DINO (Sep 2026): Predicts from side and wrist cameras together, which enables planning over full arm position and rotation.
+
+Benchmarks: how to test a world model
+A new benchmark is a good first project, and reading these shows which abilities are still weak. A repeated finding is that good-looking video does not guarantee correct actions, physics or memory.
+
+WorldBench (Jan 2026): Tests one physics concept at a time, such as object permanence or friction.
+
+MIND (Feb 2026): Uses 250 1080p videos to test memory consistency and action control.
+
+WorldArena (Feb 2026): Tests 14 models and finds that high visual quality does not imply strong task performance.
+
+WorldMark (Apr 2026): Sends the same WASD-style commands to 10 models and measures how accurately and quickly each one reacts.
+
+iWorld-Bench (May 2026): Tests 14 models on six task types covering visual quality, following a path and memory.
+
+WBench (May 2026): Runs 20 models through 289 multi-turn cases and finds that no model is strong in every area.
+
+WorldRoamBench (Jun 2026): Tests 10+ models for 10 to 60 seconds of continuous control and finds that none reliably passes on action, visuals, physics and memory.
+
+WMEval (Oct 2026): Runs the same actions in Unity and in the world model, then compares them against the true physical state.
+
+WorldProbe (Oct 2026): An agent steers the camera for up to 180 seconds and finds that long-range memory remains weak in 10 models.
+
+WorldFailBench (Oct 2026): Tests whether world models reproduce how and when robot policies fail, beyond predicting success or failure.
+
+One Verdict Is Not Enough (Oct 2026): A change to the test code moved accuracy by 2.6 points but changed 214 test results, so one score can hide regressions.
+
+Software agents and interpretability
+World models also predict websites, programs and experiments. Interpretability asks what is actually stored inside these models.
+
+World models for software
+WebWorld (Feb 2026): Simulates websites after training on over 1M open-web interactions, so web agents can practice without touching real sites.
+
+MLE-World (Oct 2026): Predicts a training program's output without running it, and matches the real output on 77.9% of held-out programs.
+
+Agent World Model in the Wild (Oct 2026): Generates practice computers and tasks for training computer-use agents using only open-source models.
+
+Model What Matters (Oct 2026): Makes language agents predict only the parts of an observation that help their next decision.
+
+Looking inside
+Interpreting Physics in Video World Models (Feb 2026): Physical variables become readable at a middle depth of video encoders and then fade toward the output layers.
+
+World Model Interpretability (Oct 2026): A position paper arguing we should study how latent variables interact and cause predictions, beyond what they encode.
+
+Start your first project
+Pick one paper from this map that makes a claim you can test, run its code, and reproduce one of its numbers before changing anything. Then change one thing and write down the result.
+
+Code you can run
+LeWorldModel: Trains a world model directly from camera images, and comes with data and trained checkpoints.
+
+JEPA world models: Meta's code, data and trained models for testing which design choices make planning with a world model succeed.
+
+DINO-WM: Trains a world model on top of a ready-made image model, then uses it to plan on tasks it was not trained for.
+
+Causal-JEPA: Trains a world model that sees a scene as separate objects, so it learns how those objects affect each other.
+
+V-JEPA 2: Meta's code and trained models that learn to understand and predict video without human labels.
+
+DreamerV3: A reinforcement learning agent that learns a world model and practices inside it, using the same settings on very different tasks.
+
+TD-MPC2: Learns a world model for smooth physical movement, like controlling a robot, and plans each action with it.
+
+DIAMOND: An agent trained entirely inside a diffusion world model, with trained Atari and Counter-Strike worlds you can play yourself.
+
+Matrix-Game: Skywork AI's open interactive world models, where the newest version lets a game engine run the game while a video model draws the detailed picture.
+
+Five questions for inspiration
+Does the better planning distance work on new tasks? The neighbor-graph distance changes only the planning cost, so you can try it on a new environment with no retraining.
+
+Does next-step error predict planning in other models? The paper measured one JEPA model, so repeat its measurement on DINO-WM or on a Dreamer-style model.
+
+Which physical facts does the latent miss? Train LeWorldModel on a task, try to read position and speed from the latent, and see which ones fail.
+
+When does updating the model during use help? Take a trained model, change the visuals or the physics in the test environment, and compare a frozen model with an adapted one.
+
+Where does memory break in an open video world model? Run WorldProbe on one open model and report the first kind of scene where it forgets; this one needs a large GPU.

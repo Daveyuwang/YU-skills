@@ -1,0 +1,539 @@
+Audio AI
+
+Audio AI covers models that hear, speak and make sound. A voice assistant is a good example: one model turns your words into text, another works out the answer, and a third reads it aloud. Newer models do all of this in one network and can listen while they talk.
+
+Each paper below has an arXiv link and one simple sentence. Results are the numbers the authors report, and they were not rerun here. Links were checked against arXiv on November 2, 2026.
+
+The 8 branches
+Speech to text: Turning spoken words into written text. First paper: Whisper.
+
+Text to speech: Turning written text into natural speech. First paper: F5-TTS.
+
+Voice cloning and conversion: Copying a voice from a short clip, or changing who seems to be speaking. First paper: kNN-VC.
+
+Music generation: Making music and sound effects from text. First paper: MusicGen.
+
+Separating sounds: Pulling one sound out of a mix, such as vocals out of a song. First paper: Hybrid Transformer Demucs.
+
+Understanding audio: Models that can label sound and answer questions about it. First paper: CLAP.
+
+Real-time voice models: Models that listen and speak at the same time in a live conversation. First paper: Moshi.
+
+Detecting fake voices: Telling real speech from AI speech, and marking AI audio so it can be found later. First paper: Does Audio Deepfake Detection Generalize?
+
+Words you will see
+ASR (automatic speech recognition): speech to text.
+
+TTS: text to speech.
+
+Spectrogram: a picture of sound that shows how loud each pitch is at each moment.
+
+Vocoder: a model that turns a spectrogram back into a sound wave.
+
+Audio codec: a model that squeezes sound into a small set of numbers or tokens, then rebuilds it.
+
+Flow matching: training a model to move random noise step by step until it becomes real data.
+
+Zero-shot voice cloning: copying a new voice from a short clip with no extra training on that voice.
+
+Voice conversion: keeping the words but changing who seems to be saying them.
+
+Full duplex: listening and speaking at the same time, like a person on a phone call.
+
+Large audio language model (LALM or audio LLM): a large language model that can also take sound as input.
+
+WER (word error rate): the share of words transcribed wrongly, so lower is better.
+
+EER (equal error rate): a fake-voice detector's error rate at the point where false alarms and misses are equal, so lower is better.
+
+Watermark: a hidden signal added to audio so that a detector can recognize it later.
+
+Sparse autoencoder (SAE): a tool that splits a model's internal numbers into separate features people can inspect.
+
+GRPO: a reinforcement learning method often used to improve a model after normal training, using rewards.
+
+Speech to text
+Papers that shaped the field
+Listen, Attend and Spell (Aug 2015): One network listens to speech and writes out characters using attention.
+
+Deep Speech 2 (Dec 2015): One network trained from audio to text that works for both English and Mandarin.
+
+SpecAugment (Apr 2019): Hiding parts of the spectrogram during training makes speech recognition more accurate.
+
+Conformer (May 2020): Adds convolution to a transformer so the model catches both nearby and distant patterns in speech.
+
+wav2vec 2.0 (Jun 2020): Learns speech features from raw audio without labels, so far less labeled data is needed.
+
+WavLM (Oct 2021): A self-supervised speech model built to handle many speech tasks, including telling speakers apart.
+
+Whisper (Dec 2022): Trained on 680,000 hours of internet audio with transcripts, and works across many languages.
+
+Zipformer (Oct 2023): A speech encoder that is faster, uses less memory and performs better than Conformer.
+
+Moonshine (Oct 2024): Speech recognition models built for live transcription and voice commands.
+
+Open models
+Canary-1B-v2 and Parakeet (Sep 2025): Canary is reported to beat Whisper-large-v3 on English at 10 times the speed, and Parakeet covers the same 25 languages with 600M parameters.
+
+Qwen3-ASR (Jan 2026): Two all-in-one speech recognition models released under the Apache 2.0 license.
+
+VibeVoice-ASR (Jan 2026): Handles language switching with no language setting, and accepts your own context to get special terms right.
+
+VibeVoice-ASR-Streaming (Sep 2026): Writes who said what as speech arrives, with no separate step for identifying speakers.
+
+Is the score real?
+Towards Quantifying Benchmark Optimization (Aug 2026): Finds that top models behave differently on benchmarks in ways that can inflate scores without better everyday transcription.
+
+Preference-ASR (Jun 2026): A test set with instructions for how to write numbers, filler words, names and casing, where rankings shift by preference.
+
+Text-Only LLM Correctors Break Correct Transcripts (Oct 2026): LLMs that fix transcripts also break correct text, and a single error score hides this.
+
+When Audio Separation Hurts Zero-Shot ASR (Mar 2026): Cleaning audio with SAM-Audio before Whisper can lower accuracy even when the audio quality improves.
+
+When models make up words
+Whisper Hallucination Detection and Mitigation (Jun 2026): Steering with a sparse autoencoder cuts made-up text on non-speech audio from 72.63% to 14.11% for Whisper small.
+
+Probing and Mitigating Hallucinations (Oct 2026): Traces made-up text to attention that leans too much on text tokens, then reduces it with a new model called AudioSLM.
+
+Faster, smaller and better
+DiaScriber (Aug 2026): One speech LLM that writes down what was said and who said it in multi-speaker audio.
+
+Look Less, Hear Better (Sep 2026): Rewarding both accuracy and speed cuts streaming errors by 30.8% at an 80 ms delay with no change to the model's design.
+
+Learning New Words from Unlabeled Test Data (Sep 2026): Picks up new words from unlabeled audio, cutting character errors on recurring unknown words by up to 14.97% on LibriSpeech.
+
+Oído (Oct 2026): Speech recognition that is not limited to a fixed word list, running on a $5 microcontroller.
+
+Text to speech
+Papers that shaped the field
+WaveNet (Sep 2016): Generates sound one sample at a time, which made machine speech sound far more natural.
+
+Tacotron 2 (Dec 2017): Turns text into a spectrogram, then uses WaveNet to turn that into sound.
+
+FastSpeech 2 (Jun 2020): Generates speech all at once instead of frame by frame, and predicts pitch, energy and duration.
+
+VITS (Jun 2021): Goes straight from text to sound in one model, with no separate vocoder.
+
+VALL-E (Jan 2023): Treats speech as a sequence of codec tokens, so a language model can generate it.
+
+StyleTTS 2 (Jun 2023): Uses style diffusion and adversarial training to aim for human-level speech.
+
+Voicebox (Jun 2023): Uses flow matching to generate speech and to fill in parts of existing speech.
+
+Matcha-TTS (Sep 2023): Uses flow matching to make speech quickly with little memory.
+
+Natural language guidance of text-to-speech (Feb 2024): Controls the speaker and recording style with plain written descriptions.
+
+Seed-TTS (Jun 2024): A family of autoregressive models whose speech the authors call virtually indistinguishable from human speech.
+
+XTTS (Jun 2024): Zero-shot voice cloning that reaches many languages, including ones with little training data.
+
+F5-TTS (Oct 2024): Generates speech with flow matching and no duration model, text encoder or phoneme alignment.
+
+Fish-Speech (Nov 2024): Uses large language models to handle complex language features across many languages.
+
+Vocoders: from spectrogram to sound
+HiFi-GAN (Oct 2020): A fast vocoder trained with adversarial networks that makes high-quality speech.
+
+BigVGAN (Jun 2022): A vocoder that also works on unseen speakers, languages, singing voices and music.
+
+Vocos (Jun 2023): Predicts sound in the frequency domain, which makes it much faster than time-domain vocoders.
+
+Real-Time Streaming Mel Vocoding (Sep 2025): A flow matching vocoder that runs live on a consumer laptop GPU with 48 ms of total delay.
+
+Open models
+VibeVoice (Aug 2025): Generates up to 90 minutes of speech with up to 4 speakers.
+
+Qwen3-TTS (Jan 2026): A controllable family for many languages, released with its tokenizers under Apache 2.0.
+
+Fish Audio S2 (Mar 2026): Open multi-speaker text to speech with under 100 ms before the first audio.
+
+MOSS-TTS (Mar 2026): Supports zero-shot cloning, control of duration and pronunciation, and stable long speech.
+
+Chatterbox-Flash (May 2026): Fine-tunes an existing voice cloning model so that it can stream and generate speech faster.
+
+What happens inside the model
+Tracing a Sparse Emotion-Control Circuit (Oct 2026): Traces a small route inside an LLM-based model that carries emotion from the reference clip to the speech.
+
+Discovering Interpretable Acoustic Features (Oct 2026): Finds 684 validated sparse autoencoder features in Qwen3-TTS, covering speakers, speaking style and recording conditions.
+
+How to test and improve it
+Training a Compact, Strong, and Realistic TTS Model (Oct 2026): Trains in three stages, ending with reinforcement learning guided by a realism critic.
+
+Listen, Critique, and Refine (Sep 2026): The model hears its own speech, critiques it and tries again, improving 7.15% on InstructTTSEval.
+
+Beyond the Benchmark (Oct 2026): Finds that Qwen3-TTS leads on being understood and on pitch register but trails on prosody, and that metrics rank systems differently from listeners.
+
+Measuring the Verifier's Floor (Oct 2026): Warns that checking speech with a recognizer can blame the speech model for the recognizer's own rare-word mistakes.
+
+What Makes a Good Audio Prompt? (Oct 2026): Picks the best reference clip without generating anything, cutting word errors by a third for Qwen3-TTS.
+
+Faster, smaller and longer
+DriftTTS (Oct 2026): Matches the multi-step quality of Matcha-TTS with a single decoder call.
+
+Paradee (Oct 2026): Shrinks Kokoro-82M into a single-voice model with 8.07M parameters.
+
+ImageTTS (Oct 2026): Reuses pretrained image diffusion models to make speech.
+
+Tacit-TTS (Sep 2026): Clones voices with no transcript of the reference clip, even from babble or other languages.
+
+Voice cloning and conversion
+Papers that shaped the field
+Neural Voice Cloning with a Few Samples (Feb 2018): Copies a new voice from only a few recordings.
+
+SV2TTS (Jun 2018): A separately trained speaker model lets text to speech use voices it never saw.
+
+AUTOVC (May 2019): An autoencoder that the authors say was the first to do zero-shot voice conversion.
+
+kNN-VC (May 2023): Changes a voice by swapping each moment of speech for the closest match from the target speaker.
+
+OpenVoice (Dec 2023): Copies a voice from a short clip and generates speech in multiple languages.
+
+Seed-VC (Nov 2024): Zero-shot voice conversion with diffusion transformers, aimed at stopping the original voice from leaking through.
+
+Recent models
+X-Voice (May 2026): A 0.4B model that clones voices across 30 languages.
+
+Cross-Lingual F5-TTS 2 (Sep 2026): Reaches higher speaker similarity than F5-TTS while staying understandable across languages.
+
+MeanVC 2 (Jun 2026): Streaming voice conversion that cuts delay from 211 ms to 110 ms.
+
+One-Step Voice Conversion (Sep 2026): A 13M-parameter model that learns what kNN-VC does and converts in one step.
+
+SoulX-Singer (Feb 2026): Zero-shot singing voice generation with a benchmark for testing it.
+
+Synthetic Singers (Jan 2026): A review of deep learning for singing voice generation.
+
+Limits, risks and protection
+Voice "Cloning" is Style Transfer (May 2026): Shows that cloning makes voices more alike, with less variation in accent and speaking rate.
+
+Decodability Is Not Controllability (Oct 2026): Being able to read a speaker's traits inside a model does not mean you can control them.
+
+Expose Your Disguise (Jul 2026): Recovers who really spoke from converted speech, with accuracy as high as 90.99%.
+
+Silence-the-Mimic (Sep 2026): Adds hard-to-hear changes to audio to block cloning, up to 45.3 times faster than earlier methods.
+
+Music generation
+Papers that shaped the field
+Jukebox (Apr 2020): Generates music with singing directly as raw audio.
+
+MusicLM (Jan 2023): Generates music from a text description and released the MusicCaps dataset.
+
+MusicGen (Jun 2023): One transformer that predicts compressed music tokens from text.
+
+AudioLDM (Jan 2023): Generates sound from text with a latent diffusion model.
+
+Stable Audio (Feb 2024): Generates long stereo audio from text and controls how long it runs.
+
+Stable Audio Open (Jul 2024): An open text-to-audio model for stereo sound at 44.1 kHz.
+
+YuE (Mar 2025): Open models that turn lyrics into songs up to five minutes long.
+
+DiffRhythm (Mar 2025): A fast diffusion model that makes the vocals and instruments of a song together.
+
+ACE-Step (May 2025): An open music model aimed at speed, coherence and control.
+
+Audio codecs: compressing sound
+SoundStream (Jul 2021): A neural codec that compresses speech, music and general audio.
+
+EnCodec (Oct 2022): A real-time neural codec for mono and stereo audio.
+
+Improved RVQGAN (Jun 2023): A high-quality open codec of the kind generative audio models build on.
+
+Sparse Autoencoders for Neural Audio Codecs (Sep 2026): Finds steerable speaker-trait features in codecs, though steering usually lowers speech quality.
+
+Full songs
+DiffRhythm 2 (Oct 2025): Generates full songs in blocks and improves structure with a new alignment loss.
+
+HeartMuLa (Jan 2026): An open music model family that aims to reach Suno-level results with academic-scale data and GPUs.
+
+Muse (Jan 2026): Long song generation, with plans to release its data, weights and training code.
+
+LeVo 2 (Jun 2026): Generates full songs and approaches leading commercial systems on several listening measures.
+
+YuE2 (Sep 2026): Writes a readable score and audio together, so you can edit the score and change the song.
+
+Joint Discrete and Continuous Modeling (Oct 2026): Improves SongEval from 4.152 to 4.269 on 192 shared prompts against a discrete baseline.
+
+How to train it with rewards
+Improving Text-to-Music with Human Preference Rewards (Jun 2026): Finds which training stages actually help, with expert iteration contributing the most.
+
+Do Language Models Need Music Supervision? (Sep 2026): Verifiable rewards raise Qwen3-4B from 0.160 to 0.807 on mixed music constraints.
+
+What happens inside the model
+Ghost in the Encoder (Sep 2026): Finds artist identity inside lyric representations, which prompt filters do not cover.
+
+Tracing Inputs, Verifying Outputs (Oct 2026): Tests ways to check whose music contributed to an AI song.
+
+Do Music Generative Models Understand Musical Qualities? (Sep 2026): Finds that sparse autoencoder features inside the model can predict how listeners rate music.
+
+Pitch-class Steering (Sep 2026): Steering a diffusion music model's internals raises melodic coherence 2.4 times.
+
+Learning Interpretable Features in Audio Latent Spaces (Oct 2025): Tracks how pitch, timbre and loudness change as DiffRhythm generates music.
+
+Sound effects and editing
+TinyAudio (Sep 2026): Compact text-to-audio that uses 0.48 GB of peak GPU memory, with a variant that runs in real time on four CPU cores.
+
+Audio Editing in the Era of Foundation Models (Jun 2026): A survey of methods for changing existing audio.
+
+A Unifying Perspective on Audio Generative Modeling (Aug 2026): A framework for comparing what an audio model generates and how it generates it.
+
+Separating sounds
+Papers that shaped the field
+Demucs (Nov 2019): Separates the instruments in music directly from the sound wave.
+
+SepFormer (Oct 2020): Replaces recurrent networks with transformers to separate speech in parallel.
+
+TF-GridNet (Sep 2022): Separates speakers from a spectrogram, gaining 23.4 dB of SI-SDR on WSJ0-2mix.
+
+Band-split RNN (Sep 2022): Splits a song's spectrogram into frequency bands and treats each one separately.
+
+Hybrid Transformer Demucs (Nov 2022): Uses a transformer to split songs into parts, reaching 9.20 dB of SDR on MUSDB.
+
+Separate Anything You Describe (Aug 2023): Pulls a target sound out of a mix from a written description.
+
+BS-RoFormer (Sep 2023): Combines band splitting with a RoPE transformer for music separation.
+
+Mel-Band RoFormer (Oct 2023): Splits bands the way human hearing does and beats BS-RoFormer on vocals, drums and other stems.
+
+SAM Audio (Dec 2025): Separates sounds from prompts in text, video or time spans, and adds a real-world benchmark.
+
+Recent separation
+FLOMSS (Oct 2026): Separates music with flow matching and gets competitive results on MUSDB18-HQ.
+
+Learning Where to Split (Oct 2026): Lets the model choose its frequency bands based on the sound, with a 29.0% gain in SI-SDR on DnR v2.
+
+Music Source Separation via Stem Discovery (Sep 2026): Finds the parts of a song by itself and matches manually queried baselines.
+
+USE (Dec 2025): One model that either separates all sounds or extracts the one you ask for.
+
+SLM-SS (Jan 2026): Separates speech with a speech language model, keeping the words easier to understand.
+
+CodecSep (Sep 2025): Separates sounds directly on codec tokens, using about 54 times less compute than AudioSep.
+
+Cleaning up speech
+Real-time Speech Restoration (May 2026): Restores speech with 120 times less compute than the state of the art at similar quality.
+
+Transcript-Supervised Post-Training (Sep 2026): Uses transcript rewards to cut word errors by 5.08 percentage points on real recordings.
+
+StreamSE (Oct 2026): Cleans speech live on a single smartphone CPU core.
+
+Understanding audio
+Papers that shaped the field
+PANNs (Dec 2019): Pretrained networks that can tag many kinds of sound.
+
+AST (Apr 2021): Applies a transformer to spectrograms and reaches 0.485 mAP on AudioSet.
+
+CLAP (Jun 2022): Learns to match sounds with written descriptions, so it can label sounds with no training labels.
+
+LAION CLAP (Nov 2022): A larger version of the same idea, trained with feature fusion and more captions.
+
+Masked Autoencoders that Listen (Jul 2022): Hides parts of a spectrogram and trains the model to rebuild them.
+
+BEATs (Dec 2022): Pretrains on sound without labels by predicting discrete tokens.
+
+EAT (Jan 2024): Audio pretraining that runs up to about 15 times faster than earlier methods.
+
+Language models that hear
+Listen, Think, and Understand (May 2023): One of the first language models focused on general audio, not just speech.
+
+SALMONN (Oct 2023): Gives a language model the ability to understand speech, sounds and music.
+
+Audio Flamingo (Feb 2024): An audio language model that learns from a few examples and holds conversations.
+
+Qwen2-Audio (Jul 2024): An open model that answers questions about audio or responds to it directly.
+
+Audio Flamingo 3 (Jul 2025): A fully open model trained only on open-source audio data.
+
+Voxtral (Jul 2025): Two chat models that understand both spoken audio and text documents.
+
+Reasoning about sound
+A Survey of Audio Reasoning (May 2026): A roadmap of how audio models are taught to reason.
+
+Audio-R1 (Oct 2026): Reinforcement learning on self-supervised audio tasks also improves other tasks the model was not trained on.
+
+Audio-Zero (Jul 2026): Improves fine-detail reasoning with no labels, using a game that pushes for more exact descriptions.
+
+AudioRSI (Oct 2026): Audio reasoners that improve themselves, with no reward saying how to reason.
+
+TAC (Feb 2026): Writes captions with timestamps so a text-only model can reason about overlapping sounds.
+
+How to test it
+AudioCapBench (Feb 2026): Finds that all tested models do best on speech captions and worst on music captions.
+
+What happens inside the model
+Do Audio LLMs HEAR Pain? (Oct 2026): Finds that pain cues in speech exist in early layers but are largely unavailable when the model answers.
+
+Uncovering Audio-Text Alignment (Oct 2026): Finds neurons that respond to the same idea in audio and text, and shows they can be steered.
+
+Who Wins the Conflict? (Jun 2026): Studies why text beats audio when they disagree, and reduces this by sending late audio signals back to earlier layers.
+
+AudioSAE (Feb 2026): Uses sparse autoencoders to cut a model's false speech detections by 70% with almost no increase in word errors.
+
+SpectralBridge (Oct 2026): Adds high-frequency hearing, gaining 30 mAP on a benchmark where answers depend on the 8-16 kHz band.
+
+Learning from sound and video
+AV-JEPA (Jul 2026): Learns from sound and video together with no decoder, teacher network or contrastive negatives.
+
+Safety
+Audio Jailbreaks (May 2026): A taxonomy of audio attacks, which also finds that current defenses trade safety against usefulness.
+
+Prosody-driven Jailbreaks (Jul 2026): Emotional delivery in audio alone worked on 44 of 95 prompts, against 11 of 95 for emotional text alone.
+
+AEGIS (Sep 2026): Uses the model's internal signals to cut the average unsafe rate from 17.9% to 0.4%.
+
+Real-time voice models
+Papers that shaped the field
+SeamlessM4T (Aug 2023): Translates speech and text across many languages in one model.
+
+Seamless (Dec 2023): Streaming speech translation that keeps the speaker's expression.
+
+Moshi (Sep 2024): One model that listens and speaks at once, instead of a chain of separate models.
+
+OpenOmni (Jan 2025): An open model for text, images and speech that talks back with under 1 second of delay.
+
+Step-Audio 2 (Jul 2025): An end-to-end model for understanding audio and holding speech conversations.
+
+PersonaPlex (Jan 2026): Lets a full-duplex model follow a text role and use a chosen voice.
+
+A Survey of Full-Duplex Spoken Dialogue Systems (Jun 2026): Sorts more than a dozen systems that claim to be full duplex by what they actually do.
+
+Why long conversations break
+Why Full-Duplex Speech Models Collapse (Oct 2026): Diagnoses the collapse and reduces it with two simple fixes and no retraining, in replays of up to an hour.
+
+Diagnosing Long-Session Degradation (Oct 2026): Keeps quality over ten-minute sessions and reduces KV-cache growth by more than 90%.
+
+PERSIST (Oct 2026): Gives voice assistants memory of who said what and when across sessions, reaching 85.08% task accuracy.
+
+Making them smarter and faster
+D2 (Oct 2026): Turns half-duplex models into full-duplex ones, with 99.2% turn-taking success at 521 ms of delay.
+
+RUBATO (Oct 2026): Runs thinking on a separate clock from speaking, reaching 40.0% to 45.1% accuracy when interrupted while the baseline fails.
+
+DiffuPlex (Oct 2026): Speeds up the model enough that all measured calls finish within the 80 ms interaction window.
+
+Window Likelihood (Oct 2026): A better reward for knowing when to stop talking, giving the best yield/hold F1 on six open models.
+
+Voice agents that use tools
+Heard Enough to Act (Oct 2026): Calls tools before the user finishes speaking, about 1.8 to 2.0 seconds early on correct in-domain calls.
+
+Heartbeat Thinking (Oct 2026): Uses listening time to prepare, cutting mean final-response delay by 36.4%.
+
+When Does an ASR Error Matter? (Oct 2026): Number and negation errors cost 21.9 to 25.7 percentage points, against 1.4 to 2.9 for control edits.
+
+How to test it
+DuplexAct (Oct 2026): A benchmark for how well models take part in live conversation, with 2,531 instances from real recordings.
+
+VAmoS Part Deux (Sep 2026): A harder voice-agent simulation, where the simulated caller often accepts wrong results because it cannot see the agent's actions.
+
+APEX-Voice (Sep 2026): Tests whether voice agents can finish professional work, and finds that coordination across steps is the main failure.
+
+Detecting fake voices
+Papers that shaped the field
+RawNet2 anti-spoofing (Nov 2020): Detects fake speech directly from the raw sound wave.
+
+ASVspoof 2021 (Sep 2021): A challenge that added deepfake speech to the fake-voice tests.
+
+AASIST (Oct 2021): A graph attention detector, with a light version of only 85K parameters.
+
+WaveFake (Nov 2021): A fake-speech dataset with two baseline detectors.
+
+Does Audio Deepfake Detection Generalize? (Mar 2022): Checks whether fake-voice detectors still work on data outside the set they were trained on.
+
+Audio Deepfake Detection: A Survey (Aug 2023): Reviews the field and names poor results on unseen attacks as a main problem.
+
+ASVspoof 5 (Aug 2024): A challenge built from crowdsourced speech with many more speakers and diverse recording conditions.
+
+Do detectors work on new fakes?
+VoxENES 2026 (Jul 2026): Tests detectors on modern LLM-driven speech, where the best model still has 28.98% EER.
+
+Spooftral (Sep 2026): Adapts Voxtral into a detector with 4.25% EER on ASVspoof5.
+
+Too Emotional to Be Fake? (Oct 2026): Finds that emotion changes within real speech raise false alarms by up to 24.4 percentage points.
+
+Intervention-Based Shortcut Diagnosis (Jul 2026): Finds that detectors rely heavily on the non-speech parts of a clip.
+
+Detection on real calls
+RealComm (Oct 2026): Trains on real calls and lowers one detector's EER from 37.94% to 22.37%.
+
+Watermarks
+AudioSeal (Jan 2024): A watermark that shows which parts of a clip are AI-generated.
+
+SilentCipher (Jun 2024): Hides messages in audio sampled at 44.1 kHz with no audible change.
+
+The Watermark Shortcut (Jun 2026): Detectors learn to treat any watermark as fake, so a watermark on real speech can make it look fake.
+
+Learning to Evade (Jun 2026): An adaptive attack on watermarks, where detectors caught 0% of the removals.
+
+How Fragile Is Your Watermark? (Aug 2026): Removes several watermarks with no training, though latent-domain marks resist every such attack tested.
+
+Watermarks under Speech Enhancement (Sep 2026): Shows that everyday speech cleaning can destroy watermarks.
+
+Start your first project
+Pick one model, one small dataset and one number you will measure. A short set of your own recordings is enough for many of these questions, and most of the tests only run existing models instead of training new ones.
+
+Code you can run
+Whisper: OpenAI's speech-to-text models, which you can run from the command line or from Python.
+
+faster-whisper: Runs Whisper faster by using the CTranslate2 engine.
+
+sherpa-onnx: Runs speech to text, text to speech, speaker labeling and sound separation offline, including on small devices.
+
+NeMo Speech: NVIDIA's speech toolkit, with links to its open model checkpoints.
+
+VibeVoice: Microsoft's voice models, including speech to text that writes who said what and when.
+
+F5-TTS: The official code for F5-TTS.
+
+Kokoro: Runs Kokoro, a small open text-to-speech model with 82M parameters.
+
+Qwen3-TTS: Speech generation with voice cloning and voice design, in 0.6B and 1.7B sizes.
+
+Chatterbox: Open-source text-to-speech models from Resemble AI.
+
+Coqui TTS: A toolkit for training and running many text-to-speech models, including XTTS.
+
+OpenVoice: Copies a voice from a short clip and speaks in other languages.
+
+RVC: A web interface that trains voice conversion on 10 minutes or less of voice data.
+
+AudioCraft: Code for training and running MusicGen and AudioGen.
+
+ACE-Step 1.5: An open-source music generation model.
+
+YuE: Now holds YuE2, with the original YuE kept on the YuE-v1 branch.
+
+DiffRhythm: The code for the DiffRhythm song generation model.
+
+stable-audio-tools: Training and inference code for audio generation models.
+
+Demucs: Splits a song into parts such as vocals and drums, but its README says this repository is no longer maintained.
+
+Music Source Separation Training: Trains music separation models, with many architectures to choose from.
+
+SAM-Audio: Isolates a sound in audio from a text, visual or time prompt.
+
+CLAP: Turns audio and text into embeddings that you can compare or use in your own model.
+
+Moshi: Runs the Moshi full-duplex model, with a PyTorch version for research.
+
+PersonaPlex: A real-time model that listens and speaks at once, with control over its role and voice.
+
+Audio Flamingo: The code for NVIDIA's series of audio understanding models.
+
+AudioSeal: The official audio watermarking code, including training code.
+
+AASIST: Trains and evaluates fake-voice detectors.
+
+ASVspoof 5 baselines: The challenge's baseline detectors, including RawNet2 and AASIST.
+
+Five questions for inspiration
+Can you stop Whisper tiny from making up words?: Whisper can write fluent text for audio with no speech. Collect noise clips, count the made-up words, and test whether a simple fix lowers the count without hurting real speech.
+
+Does cleaning audio help or hurt transcription on your own recordings?: Audio that sounds cleaner can be harder to transcribe. Record noisy clips, run Whisper before and after cleaning, and compare word errors.
+
+Which short clip gives the best voice clone?: The reference clip changes the result a lot. Clone one voice from clips with different lengths and noise levels, then compare word errors and speaker similarity.
+
+Can a small detector catch a voice model it never saw?: Detectors often fail on new generators. Train a small one on a few generators, then test it on speech from a newer model such as Kokoro or F5-TTS.
+
+Does a watermark survive everyday audio processing?: Speech cleaning can destroy watermarks. Add AudioSeal to some clips, run compression and cleaning, and measure how often the detector still finds it.

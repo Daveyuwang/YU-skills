@@ -1,0 +1,475 @@
+Making LLMs Faster and Cheaper
+
+A trained language model needs a lot of memory and compute every time it answers. For example, a 70B model stored with 16 bits per number needs about 140 GB of memory just for its weights, and it must run once for each word it writes. This map covers ways to make that cost smaller: fewer bits, smaller models, faster generation, less memory and better use of hardware. Training the model in the first place is in the LLM Pre-training map.
+
+Each paper below has an arXiv link and one simple sentence. Results are the numbers the authors report, and they were not rerun here. Links were checked against arXiv on November 2, 2026.
+
+The 7 branches
+Quantization: Storing each number in the model with fewer bits. First paper: GPTQ.
+
+Smaller models: Removing parts of a model, or teaching a small model to copy a large one. First paper: SparseGPT.
+
+Faster generation: Writing several words per step instead of one. First paper: Fast Inference via Speculative Decoding.
+
+Memory for long inputs: Reducing what the model must remember about earlier words. First paper: CacheGen.
+
+Routing and reuse: Using a cheap model when it is enough, and reusing past answers. First paper: Large Language Model Cascades.
+
+Serving many people: Sharing one set of GPUs across many requests. First paper: vLLM.
+
+Hardware and energy: What the chips do while the model runs and how much power it takes. First paper: LLM Inference Unveiled.
+
+Words you will see
+Inference: running a trained model to get an answer.
+
+Token: a piece of text, usually a word or part of a word.
+
+Latency: how long someone waits for an answer.
+
+TTFT: time to first token, the wait before the first word appears.
+
+Throughput: how many tokens a system writes per second in total.
+
+Quantization: storing numbers with fewer bits, such as 4 bits instead of 16.
+
+Pruning: removing weights or whole parts of a model.
+
+Low-rank: replacing a big matrix with two small ones that multiply to nearly the same result.
+
+Distillation: training a small model to copy a large one.
+
+Speculative decoding: a small model guesses several words, and the large model checks them all in one step.
+
+Early exit: stopping before the last layer when the model is already confident.
+
+KV cache: the stored keys and values of earlier words, which the model reuses for each new word.
+
+Sparse attention: looking at only some earlier words instead of all of them.
+
+Prefix caching: reusing the KV cache when two prompts start with the same text.
+
+Semantic caching: returning a saved answer when a new question means the same thing as an old one.
+
+Routing: choosing which model should answer each question.
+
+Prefill and decode: reading the prompt, then writing the answer. They stress the hardware differently.
+
+Disaggregation: running parts of inference, such as prefill and decode, on separate machines.
+
+NPU: a low-power chip for AI in phones and laptops.
+
+FPGA: a chip whose circuits can be rewired for one job.
+
+Quantization
+Good papers to start with
+A Survey of Quantization (Mar 2021): A broad introduction to the methods and the math.
+
+Integer-Arithmetic-Only Inference (Dec 2017): An early method for running neural networks using only 8-bit integers.
+
+LLM.int8() (Aug 2022): Makes 8-bit multiplication work for very large transformers.
+
+GPTQ (Oct 2022): Compresses weights to 3 or 4 bits after training, using second-order information.
+
+SmoothQuant (Nov 2022): Moves difficulty from activations to weights, so that both can use 8 bits.
+
+AWQ (Jun 2023): Protects the weights that matter most, chosen by looking at activations.
+
+QLoRA (May 2023): Fine-tunes a model that is already quantized, which also shows what 4-bit storage can do.
+
+A Survey on Model Compression (Aug 2023): An overview of compression methods for language models.
+
+Why quality drops
+Signal and noise (Aug 2026): Finds that damage depends on where errors enter and how they build up through the network.
+
+Expressive power (Jun 2026): A theory of how much a model can represent as the number of bits goes down.
+
+Smoothness (May 2026): Argues that extreme quantization must keep the model smooth, not only keep its numbers close.
+
+Fidelity metrics (Jun 2026): Finds that common metrics measure how much a quantized model disagrees, not which way.
+
+Saying, not knowing (Oct 2026): Finds that heavily quantized small models can write fluent text that has lost its meaning.
+
+Does compression preserve uncertainty? (Jun 2026): Finds that accuracy alone is not enough for judging a compressed model.
+
+New methods
+Replay the Curvature (Sep 2026): Quantizes a 397B model, with per-layer time cut by over 15x compared with a popular tool.
+
+Trainable Vector Quantization (Oct 2026): Reaches 2 bits on a 70B model with only a 1% accuracy drop.
+
+MoBiQuant (Feb 2026): Lets one model change its precision token by token while running.
+
+OffQ (Jun 2026): Handles outlier values in a structured way, so that low-bit models lose less accuracy.
+
+LoopQ (May 2026): Adapts quantization to models that repeat the same layers.
+
+The Era of 1-bit LLMs (Feb 2024): Builds models with weights of only -1, 0 and 1.
+
+BitNet (Oct 2023): An earlier 1-bit transformer trained from scratch.
+
+Dynamic sparsity (Nov 2025): Combines quantization and sparsity for up to 1.55x faster decoding on ordinary GPUs.
+
+Practical guides
+Which quantization should I use? (Jan 2026): A guide to choosing among llama.cpp formats.
+
+SLMQuant (Nov 2025): Benchmarks quantization on small language models.
+
+Mixed-precision techniques (Oct 2025): A review of using different numbers of bits in different places.
+
+Quantizing diffusion language models (Apr 2026): Finds that diffusion language models may handle quantization better than usual ones.
+
+Smaller models
+Good papers to start with
+Distilling the Knowledge (Mar 2015): The classic paper on training a small network to copy a large one.
+
+Lottery Ticket Hypothesis (Mar 2018): Shows that networks contain small parts that can train well on their own.
+
+Deep Compression (Oct 2015): Combines pruning, shared weights and coding to shrink networks.
+
+DistilBERT (Oct 2019): A smaller, faster copy of BERT, and an early success for distillation in language.
+
+SparseGPT (Jan 2023): Prunes huge models in one shot, reaching 60% sparsity with little damage.
+
+Mistral 7B (Oct 2023): Shows how much a small model can do when it is designed with care.
+
+Gemma 3 (Mar 2025): A family of open models that includes very small ones.
+
+Pruning
+LLM-Pruner (May 2023): Removes whole neurons, so that the model is really smaller, then fixes it with a short retraining.
+
+NIRVANA (Sep 2025): A theory-backed method for choosing what structured pruning should remove.
+
+Putri (May 2026): Prunes models even at extreme ratios.
+
+Pruning for reasoning (Dec 2025): Keeps reasoning models accurate, with 81.3% on GSM8K at 40% sparsity.
+
+How pruning reshapes features (Mar 2026): Looks inside pruned models with sparse autoencoders.
+
+Mixture of experts to dense (May 2026): Turns a model with many experts into a smaller dense one.
+
+Low-rank compression
+Optimal Brain Decomposition (Apr 2026): A closed-form low-rank method, about 20-40% better than SVD-LLM.
+
+SVD-Surgeon (Jun 2026): Improves SVD compression without any retraining.
+
+CoSpaDi (Sep 2025): Replaces low-rank matrices with sparse dictionaries for better trade-offs.
+
+Native low-rank pre-training (Feb 2026): Trains a model as low-rank from the start and studies how it scales.
+
+MatMul-free language modeling (Jun 2024): Removes matrix multiplication from a language model.
+
+Distillation and small models
+Offline top-K logits (Aug 2026): Makes distillation cheap enough to run at large scale.
+
+Task-centric acceleration (Feb 2026): Speeds up small models on tasks whose output varies little.
+
+Iterate on an LLM, serve on an SLM (Oct 2026): Builds with a large model, then serves with a small one at about 2.5x lower median latency.
+
+Slm-mux (Oct 2025): Combines many small models into a more accurate system.
+
+RecurrentGemma (Apr 2024): Replaces transformers with a recurrent design for efficiency.
+
+Faster generation
+Good papers to start with
+Speculative Decoding (Nov 2022): A small model writes a draft, and the large model checks it in one step.
+
+Speculative Sampling (Feb 2023): The same idea, published independently at about the same time.
+
+Medusa (Jan 2024): Adds several extra heads to predict multiple tokens at once, with no separate model.
+
+EAGLE (Feb 2024): Drafts using the large model's hidden features instead of raw text.
+
+EAGLE-2 (Jun 2024): Builds a tree of drafts whose shape depends on confidence.
+
+Inference with Reference (Apr 2023): Copies from the prompt, which suits tasks such as editing.
+
+New speculative decoding
+Speculative Speculative Decoding (Mar 2026): Starts verifying before earlier checks finish, up to 5x faster than normal decoding.
+
+Performance or illusion? (Dec 2025): Measures real speedups and finds large gaps against theoretical limits.
+
+Approximate Speculative Decoding (Aug 2026): Allows small differences from the target model in return for more speed.
+
+3-Model Speculative Decoding (Oct 2025): Adds a third, medium model between the draft and the target.
+
+Test-Time Speculation (May 2026): Keeps adapting the drafter while answering, improving acceptance length by 41% on average.
+
+Target-to-draft pruning (Oct 2026): Builds the draft model by cutting down the target model.
+
+Hybrid verified decoding (May 2026): Learns which drafts are worth verifying.
+
+FastMTP (Sep 2025): Improves multi-token prediction, outperforming the basic version by 82%.
+
+Disparate impacts (Oct 2025): Finds that speedups are not equal across types of prompts, and proposes a fix.
+
+Diffusion as a drafter
+DFlash (Feb 2026): Uses block diffusion for drafting, reaching over 6x lossless speedup.
+
+FlashMap (Oct 2026): Writes the whole draft block in one forward pass, up to 6.1x faster.
+
+How to build a diffusion language model (Oct 2026): An introduction to language models that write many tokens at once.
+
+Beyond masked diffusion (Feb 2026): Tests alternatives to masked diffusion language models.
+
+Diffusion models change speed (Oct 2026): Finds that the speed benefit depends on how much of the output is already determined.
+
+Stopping early
+Diminishing returns of early exit (Mar 2026): Measures how much early exit can still help on modern models.
+
+DREX (Dec 2025): Changes batches during decoding, for 2-12% more throughput with early exit.
+
+Entropy after thinking (Sep 2025): Uses a simple signal to know when a reasoning model can stop.
+
+Parallel prompt decoding (May 2024): Trains a few extra prompt tokens to predict several future tokens with little extra memory.
+
+Memory for long inputs
+Good papers to start with
+FlashAttention (May 2022): Computes exact attention faster by using less slow memory.
+
+FlashAttention-2 (Jul 2023): Makes the same idea even faster with better parallel work.
+
+Generating Long Sequences (Apr 2019): An early sparse attention pattern that scales to long text.
+
+Longformer (Apr 2020): Mixes a sliding window with a few global tokens.
+
+Linformer (Jun 2020): Projects keys and values down to reach linear cost.
+
+Performers (Sep 2020): Approximates attention with random features.
+
+StreamingLLM (Sep 2023): Finds that a few kept tokens let a model run with a fixed-size cache.
+
+H2O (Jun 2023): Keeps only the tokens that attention uses most.
+
+DeepSeek-V2 (May 2024): Uses latent attention to greatly shrink the KV cache.
+
+Compressing the KV cache
+The physics of KV compression (Mar 2026): Studies why attention can tolerate so much compression.
+
+KVSculpt (Mar 2026): Treats compression as distillation, and finds difficulty varies up to 100x across layers.
+
+Learning to evict (Feb 2026): Learns which tokens will matter later.
+
+JoLT (Jul 2026): Combines low rank and low bits for near-lossless compression, with no retraining.
+
+KV cache offloading (Apr 2026): Tests these methods on tasks that truly need the context, and finds that they need better evaluation.
+
+Sparse attention in new models
+MiniMax Sparse Attention (Jun 2026): Sparse attention used in a released production model.
+
+MiniCPM-SALA (Feb 2026): Mixes sparse and linear attention, up to 3.5x faster at 256K tokens.
+
+Every Attention Matters (Oct 2025): A report on a hybrid model series built for long-context reasoning.
+
+Hybrid linear attention (Jan 2026): Converts a model to a hybrid design using just 2.3B tokens.
+
+NOSA (Oct 2025): Designs sparse attention for moving the cache to slower memory, with up to 5.04x higher throughput.
+
+ProxyAttn (Sep 2025): Uses a few heads to represent the rest, up to 10.3x faster attention.
+
+Elastic Attention (Jan 2026): Changes how sparse attention is at test time, based on the input.
+
+Sliding window adaptation (Dec 2025): Adapts existing models to sliding windows for 30% to 100% speedups.
+
+AQUA (Sep 2025): Skips parts of attention based on query values, with a knob for accuracy.
+
+FlashEVA (Nov 2025): Replaces attention with a cheaper approximation, for up to 6.7x more throughput.
+
+Memory-Efficient Looped Transformer (May 2026): Keeps memory constant in models that repeat their layers.
+
+Routing and reuse
+Routing
+Large Language Model Cascades (Oct 2023): Tries a cheap model first and moves up only when needed.
+
+Routing and cascading survey (Feb 2026): An overview of methods that choose a model for each query.
+
+Dynamic routers are often misguided (Oct 2026): Finds four flaws in routing tests, and shows that a good model list leaves little to route.
+
+LLMRouter (Aug 2026): Shared infrastructure for building and testing routers.
+
+Stepwise model routing (Nov 2025): Switches models during reasoning, using the model's own confidence.
+
+SWE-Router (Jun 2026): Routes between models during long coding tasks.
+
+LLM shepherding (Jan 2026): Buys only hints from a large model, for up to 2.8x lower cost.
+
+RouteBalance (Jun 2026): Chooses a model and a machine together, instead of separately.
+
+Reusing work
+Prompt Cache (Nov 2023): Reuses attention states across prompts that share parts.
+
+Year in LLM serving (Jul 2026): Releases one full year of serving traces with a study of caching.
+
+Semantic-aware eviction (May 2026): Learns which cached tokens to keep, for 1.4x-2.7x faster first tokens.
+
+Exact memory-time optimization (Oct 2026): Formally weighs storing a prefix against computing it again.
+
+Continuous semantic caching (Apr 2026): A theory of caching when questions can be similar in endless ways.
+
+Operational gap in semantic caching (Jun 2026): Argues that choosing a model for caching depends on thresholds, not ranking.
+
+Leyline (May 2026): Lets agents tell the system what to do with their cache.
+
+Shorter prompts
+LLMLingua (Oct 2023): Removes unneeded words from prompts while keeping answers good.
+
+Prompt compression in the wild (Apr 2026): Measures when compression truly saves time, and shares a profiler.
+
+Tone and cost (Jul 2026): Finds that prompt tone changes how many tokens a model uses and bills.
+
+Serving many people
+Good papers to start with
+vLLM (Sep 2023): Manages memory for the KV cache like an operating system manages pages.
+
+SGLang (Dec 2023): A fast system for programs that call a model many times.
+
+Sarathi-Serve (Mar 2024): Mixes prompt reading and writing in one batch, so that fewer requests wait.
+
+Splitwise (Nov 2023): Runs prefill and decode on separate machines.
+
+FlexGen (Mar 2023): Gets high throughput with limited memory by moving data between GPU, CPU and disk.
+
+DeepSpeed-FastGen (Jan 2024): Combines several ideas for high throughput with low latency.
+
+Efficiently Scaling Transformer Inference (Nov 2022): An early look at running models at a very large scale.
+
+A Survey on Efficient Inference (Apr 2024): An overview of efficient inference for language models.
+
+Scheduling
+Tail-aware scheduling (Jun 2026): Cuts first-token waiting by 34-47% with no reliance on length predictions.
+
+Uncertain length predictions (Apr 2026): Uses a range of likely lengths, with 2.31x lower latency per token online.
+
+LEAP (Oct 2026): Predicts output length with a very small model.
+
+Black-box scheduling (Apr 2026): Schedules requests from the client side when the serving system is out of reach.
+
+Branch parallelism (May 2026): Controls how many answer branches run at once, for up to 1.77x more goodput.
+
+Offline inference (May 2026): Gets up to 2.51x more throughput than vLLM on ordinary GPU servers.
+
+Splitting the work
+From attention to disaggregation (Oct 2025): Traces how serving moved to separate prefill and decode.
+
+How far can disaggregation go? (May 2026): Explores splitting attention and feed-forward layers across GPUs.
+
+Crossflow (Sep 2026): Moves capacity between prefill and decode, for 16.2-17.4% more throughput.
+
+Scaling via parallelism (Oct 2026): Finds that the best parallel setup changes as context gets longer.
+
+DualMap (Feb 2026): Balances cache reuse and even load, with up to 2.25x more capacity.
+
+Agents as a workload
+TraceLab (Jun 2026): Measures what coding agents ask of serving systems, and releases the data.
+
+Kalypso (Jul 2026): Speeds up batches of queries up to 4.57x by serving them as one job.
+
+Hardware and energy
+Good papers to start with
+LLM Inference Unveiled (Feb 2024): Uses a simple model of chip limits to explain inference speed.
+
+Full Stack Optimization (Feb 2023): A survey from hardware up to the software that runs transformers.
+
+A Systematic Characterization on GPUs (Dec 2025): Gathers measurements of how inference really behaves on GPUs.
+
+PowerInfer (Dec 2023): Runs large models on a consumer GPU by keeping busy data in GPU memory.
+
+PowerInfer-2 (Jun 2024): Brings the same idea to smartphones.
+
+GPUs and servers
+Dissecting GPU utilization (Sep 2026): Shows that a single utilization number can hide what the GPU is really doing.
+
+CPU-induced slowdowns (Mar 2026): Finds that giving the CPU enough resources cuts first-token time by 1.47-7.11x.
+
+ZipServ (Mar 2026): Adds lossless compression that also makes inference faster, by 1.22x on average.
+
+High Bandwidth Flash (Sep 2026): Studies a new kind of memory for model weights and caches.
+
+Emerging AI accelerators (Jun 2026): Compares new chips separately for prefill and decode.
+
+SPAD (Oct 2025): Designs different chips for prefill and decode, with lower hardware costs.
+
+LUT-LLM (Nov 2025): Replaces arithmetic with memory lookups on an FPGA.
+
+Phones and laptops
+Apple Silicon comparison (Oct 2025): Compares five runtimes for local inference on Mac.
+
+BaseRT (Jul 2026): Uses the Neural Accelerators in Apple's M5 chips for local inference.
+
+Is your NPU ready? (Jul 2026): Finds hidden bottlenecks in phone chips, and estimates up to 53.2% energy savings.
+
+When NPUs are not faster (May 2026): Finds that moving more work to the NPU can raise energy use by up to 51%.
+
+Diffusion models on a phone (Jun 2026): Runs a diffusion language model on a mobile NPU 17x-42x faster than on the CPU.
+
+Single-board computers (Apr 2026): Benchmarks small AI boards for use with no connection.
+
+Hydra (Aug 2026): Measures inference stage by stage across generations of edge chips.
+
+Roofline scaling laws (Feb 2026): Designs a model and its on-device hardware together.
+
+Energy and fair measurement
+From Prompts to Power (Nov 2025): Measures inference energy and builds a model that predicts it.
+
+TokenPowerBench (Dec 2025): An open benchmark for power use, up to a 405B model.
+
+SweetSpot (Feb 2026): Predicts the energy per token at each prompt and output length.
+
+Energy across languages (Jun 2026): Measures how energy costs differ between languages.
+
+EnerInfer (Jun 2026): Improves on-device energy use by up to 65% on phones.
+
+Bench360 (Nov 2025): Tests local inference from many sides, and finds no single best option.
+
+Measurement bias (May 2026): Separates real serving speed from mistakes in how benchmarks measure it.
+
+Reproducible benchmarking (Oct 2026): A protocol for getting repeatable results.
+
+InferenceBench (May 2026): Tests whether AI agents can speed up inference on their own.
+
+Start your first project
+Code you can run
+llama.cpp: Runs quantized models on ordinary computers, written in C and C++.
+
+Ollama: The easiest way to download and run an open model locally.
+
+MLX: Apple's array library for running models on Mac.
+
+vLLM: The most popular open server for language models.
+
+SGLang: A fast serving framework, and the code from the SGLang paper.
+
+LLM Compressor: Quantizes and compresses models for use in vLLM.
+
+GPTQ: The original code for GPTQ, and short enough to read.
+
+llm-awq: The code for AWQ quantization.
+
+BitNet: Runs 1-bit models on a CPU.
+
+Medusa: A simple way to try multi-token prediction.
+
+EAGLE: The code for the EAGLE speculative decoding methods.
+
+Streaming LLM: The small code change that lets a model run with a fixed-size cache.
+
+LMCache: A KV cache layer that works across many requests.
+
+Mooncake: The serving platform for Kimi, built around the KV cache.
+
+FlashMLA: Fast kernels for DeepSeek's latent attention.
+
+RouteLLM: Serves and tests routers that pick between models.
+
+LLMLingua: Shortens prompts before they reach a model.
+
+GuideLLM: Tests how a deployed model holds up under real traffic.
+
+Some questions for inspiration
+How many bits can a small model lose?: Quantize one small model to 8, 6, 4 and 2 bits, then plot its accuracy.
+
+Which prompts does speculative decoding really speed up?: Run a small draft model with a larger target, then compare speedups on math, code and chat prompts.
+
+How much of the KV cache can you drop?: Keep only part of the cache on a long prompt, then plot accuracy against memory saved.
+
+Does a simple router beat random choice?: Send questions to a small or a large model with one simple rule, then compare cost and accuracy with random choice.
+
+Where is your own computer's sweet spot?: Time a local model at several prompt and answer lengths, then plot tokens per second.
