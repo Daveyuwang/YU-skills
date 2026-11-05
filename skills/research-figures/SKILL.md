@@ -66,6 +66,15 @@ family and version identifiers as supplied. Preserve meaningful controls and
 comparisons even when simplifying the visual. Quote source text exactly when
 used as a quotation; label excerpts and keep summaries unquoted.
 
+For a more systematic or conventional diagram, use
+[structured diagrams](references/structured-diagrams.md). Select a formal
+notation only when the task or audience calls for it.
+
+When useful graphics are available, use
+[visual assets](references/visual-assets.md) to find and verify them or to work
+in Canva. Use assets in service of the scientific content, with publication
+rights and attribution checked for the intended output.
+
 For data plots, use reproducible plotting code and choose a form appropriate
 to the variables. Do not connect discrete categories by default. Show units,
 denominators, and uncertainty when they are needed to interpret the data.

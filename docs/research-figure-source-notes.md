@@ -17,3 +17,10 @@ connector routes, font choices, sizes, and version-specific overrides. These
 were not made universal rules. The reusable lessons are to follow the actual
 method and evidence, prioritize the core module, place feedback locally, keep
 examples subordinate, and inspect the rendered result at its final size.
+
+In November 2026, YU asked for more standardized diagram structures, reusable
+graphics similar to Canva elements, and a possible Canva agent workflow. The
+skill now offers structured diagram conventions as a conditional mode and
+records asset sources and license checks. A consistent visual grammar is not a
+claim of compliance with a formal diagramming standard. The Canva connector's
+available operations depend on the environment and account.
