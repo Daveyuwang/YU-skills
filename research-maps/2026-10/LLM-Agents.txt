@@ -1,0 +1,502 @@
+LLM Agents
+
+A trained language model can only write text, so it cannot fix a bug by itself. An agent puts the model in a loop: it reads a bug report, asks to open a file, sees the file, asks to run the tests, sees them fail, edits the code and tries again until the tests pass. This map covers how to get a trained model to finish long tasks this way. How the model gets trained in the first place is in the LLM Pre-training and LLM Post-training maps, and attacks on agents are in the LLM and Agent Safety map.
+
+Each paper below has an arXiv link and one simple sentence. Results are the numbers the authors report, and they were not rerun here. Links were checked against arXiv on November 2, 2026.
+
+The 7 branches
+Tools and skills: How a model asks for a search, a calculator or any other program. First paper: Toolformer.
+
+Planning and harnesses: The loop and the software around the model that keep a long task on track. First paper: ReAct.
+
+Memory: What an agent keeps when its task is longer than the model can read at once. First paper: MemGPT.
+
+Coding agents: Agents that read a repository, edit code and run tests. First paper: SWE-agent.
+
+Research, web and computer use: Agents that search, click through websites and use a desktop. First paper: WebGPT.
+
+Many agents together: Several models that split a task and pass work between them. First paper: AutoGen.
+
+Training and testing agents: How to teach an agent with practice, and how to measure what it can do. First paper: AgentBench.
+
+Words you will see
+Agent: a model running in a loop, where it acts, sees the result and decides what to do next.
+
+Tool: a program the model can ask to run, such as web search or a test runner.
+
+Function calling: the model writes a tool name and its inputs in a fixed format.
+
+Tool schema: the text that tells the model what a tool does and what inputs it takes.
+
+MCP: Model Context Protocol, a shared standard for connecting tools to models.
+
+Skill: a saved set of instructions the agent can load when a task needs them.
+
+Harness: all the software around the model, such as the loop, the tools and the rules for stopping.
+
+Context: everything the model can read at the current step.
+
+Context window: the most text a model can read at once.
+
+Compaction: replacing old parts of the context with a short summary to make room.
+
+Trajectory: the full record of one run, with every thought, action and result.
+
+Long horizon: a task that takes many steps or a long time.
+
+Subagent: a helper agent that gets one part of the task and reports back.
+
+Orchestrator: the agent that hands out work to other agents.
+
+Computer use: an agent that sees the screen and uses the mouse and keyboard.
+
+Deep research: an agent that searches many sources and writes a long report with citations.
+
+Agentic RL: reinforcement learning where the model practices whole tasks and gets a reward at the end.
+
+Test-time scaling: letting an agent use more steps, or more attempts at once, while it is being tested.
+
+Time horizon: how long a task an AI can finish, measured by the time it takes a person.
+
+Benchmark: a fixed set of tasks used to compare systems.
+
+Tools and skills
+Good papers to start with
+Toolformer (Feb 2023): A model teaches itself when to call tools such as a calculator or search engine. https://arxiv.org/abs/2302.04761
+
+Gorilla (May 2023): A model is trained to write correct calls for a large set of APIs. https://arxiv.org/abs/2305.15334
+
+ToolLLM (Jul 2023): Trains models on more than 16,000 real-world APIs. https://arxiv.org/abs/2307.16789
+
+Tool Learning with Foundation Models (Apr 2023): A survey of how models learn to use tools. https://arxiv.org/abs/2304.08354
+
+Executable Code Actions (Feb 2024): An agent does better when its actions are code instead of fixed commands. https://arxiv.org/abs/2402.01030
+
+The Bitter Lesson of Tool Calling (Aug 2026): Letting a model write code that calls tools works as well as JSON calls, and it improves as models improve. https://arxiv.org/abs/2608.06370
+
+Getting calls right
+APIGen (Jun 2024): Generates checked training data for function calling. https://arxiv.org/abs/2406.18518
+
+ToRA (Sep 2023): Solves math by mixing written reasoning with running code. https://arxiv.org/abs/2309.17452
+
+Think-Augmented Function Calling (Jan 2026): Asking the model to reason inside the call improves the inputs it writes. https://arxiv.org/abs/2601.18282
+
+The I Don't Know Filter (Jul 2026): Detects uncertain tool calls and blocks them without changing the model. https://arxiv.org/abs/2607.04034
+
+Small Reasoning Models (Aug 2026): Studies small reasoning models that follow instructions when they call functions, with on-device use in mind. https://arxiv.org/abs/2608.22472
+
+ToolFailBench (Jul 2026): Shows where tool use fails, and two similar-size models differ by 89 percentage points on control tasks. https://arxiv.org/abs/2607.04686
+
+Interface Drift (Oct 2026): Tests agents when tool descriptions change, and extra distractor tools do the most damage. https://arxiv.org/abs/2610.23342
+
+Choosing from thousands of tools
+AutoTool (Nov 2025): Uses patterns in past tool use to pick the next tool with fewer model calls. https://arxiv.org/abs/2511.14650
+
+ToolSearcher (Sep 2026): Trains tool search at large scale with reinforcement learning. https://arxiv.org/abs/2609.30906
+
+Transferable Tool Selection (Oct 2026): A trained 8B model beats a 402B model at picking tools on ToolBench. https://arxiv.org/abs/2610.31483
+
+AgentWeave (Aug 2026): Narrows the tool list before the model reasons, which changes how a fixed model behaves. https://arxiv.org/abs/2608.23078
+
+Tool-Schema Compression (May 2026): Shortens tool descriptions so agents keep working beyond 800 tools. https://arxiv.org/abs/2605.26165
+
+Toollery (Sep 2026): Cuts a huge library down to a short list of candidates for each request. https://arxiv.org/abs/2609.22218
+
+MCP and skills
+MCP Measurement Study (Sep 2025): An evidence-based look at the MCP ecosystem and how well servers are maintained. https://arxiv.org/abs/2509.25292
+
+Runtime Faults in MCP Servers (Jun 2026): Sorts the ways MCP servers fail when they run. https://arxiv.org/abs/2606.05339
+
+Progressive Disclosure of Skills (Sep 2026): Showing skills step by step improves retrieval and slightly raises latency. https://arxiv.org/abs/2609.35692
+
+Evaluating Skills at Scale (Jun 2026): Measures how much loading a skill changes what a model does. https://arxiv.org/abs/2606.17819
+
+SkillSeek (Sep 2026): Tests how to find the right skill among more than 230,000 of them. https://arxiv.org/abs/2609.38822
+
+HEART (Sep 2026): Builds reusable tool pieces and reports up to 85% lower API cost. https://arxiv.org/abs/2609.01736
+
+ToolCaching (Jan 2026): Reuses tool results and cuts latency by up to 34%. https://arxiv.org/abs/2601.15335
+
+SchemaFill (Oct 2026): Writes the parts of a tool call in parallel for up to 4.05x more throughput. https://arxiv.org/abs/2610.07086
+
+Planning and harnesses
+Good papers to start with
+ReAct (Oct 2022): A model alternates between thinking and acting, which became the standard agent loop. https://arxiv.org/abs/2210.03629
+
+Reflexion (Mar 2023): An agent writes down what went wrong and uses that on its next try. https://arxiv.org/abs/2303.11366
+
+Tree of Thoughts (May 2023): A model explores several lines of reasoning and keeps the good ones. https://arxiv.org/abs/2305.10601
+
+Code as Agent Harness (May 2026): A survey that treats code as the structure around an agent. https://arxiv.org/abs/2605.18747
+
+Natural-Language Agent Harnesses (Mar 2026): Writes the harness in plain language so it can be studied and compared. https://arxiv.org/abs/2603.25723
+
+Planning
+ReWOO (May 2023): The model writes the whole plan first, then fills in tool results, which saves tokens. https://arxiv.org/abs/2305.18323
+
+Language Agent Tree Search (Oct 2023): Combines tree search with acting and reflection. https://arxiv.org/abs/2310.04406
+
+LLM+P (Apr 2023): Hands the planning to a classic planner and gets an optimal plan back. https://arxiv.org/abs/2304.11477
+
+Planning Representations (May 2026): Compares ways of writing a plan, and both the format and the model change how robust a web agent is. https://arxiv.org/abs/2605.29927
+
+Plan Reuse (Dec 2025): Reuses plans from similar requests and cuts latency by 93.12%. https://arxiv.org/abs/2512.21309
+
+Self-Regulated Planning (May 2026): An agent learns when to plan and learns to plan further ahead rather than more often. https://arxiv.org/abs/2605.22138
+
+DeReAct (Oct 2026): Splits the single ReAct model's jobs so that finishing a task gets its own check. https://arxiv.org/abs/2610.02351
+
+Harnesses
+Recursive Agent Harnesses (Jun 2026): A harness design raises one long-context score from 71.75% to 81.36% with the same model. https://arxiv.org/abs/2606.13643
+
+Agentic Harness Engineering (Apr 2026): Improves a coding harness automatically, and most gains come from tools, middleware and memory. https://arxiv.org/abs/2604.25850
+
+Self-Evolving Agent Harness (Oct 2026): Rewrites prompts, memory and workflows while the model weights stay fixed. https://arxiv.org/abs/2610.18813
+
+Harness Design for Coding Agents (Sep 2026): Tests each part of a harness on its own to see what changes the results. https://arxiv.org/abs/2609.20804
+
+Dive into Claude Code (Apr 2026): Describes the architecture of a real coding agent and lists open design questions. https://arxiv.org/abs/2604.14228
+
+Semantic Early-Stopping (Jun 2026): Finds that stopping a loop is easy, and that choosing the best round is the hard part. https://arxiv.org/abs/2606.27009
+
+Structured Feedback (Jul 2026): Tests what the model should see after a failed check so that its next attempt succeeds. https://arxiv.org/abs/2607.14167
+
+Context engineering
+Agentic Context Engineering (Oct 2025): The agent keeps improving its own instructions, and even a smaller open model does well. https://arxiv.org/abs/2510.04618
+
+ACON (Oct 2025): Learns how to compress context and lifts small models by up to 46%. https://arxiv.org/abs/2510.00615
+
+Beyond Token Savings (Sep 2026): Shows that compression changes what an agent does, not only how many tokens it uses. https://arxiv.org/abs/2609.32961
+
+Implicit Context Compression (May 2026): Compression inside the model works on simple tasks and fails on multi-step coding. https://arxiv.org/abs/2605.11051
+
+In-Model Context Compression (Oct 2026): Carries old context forward as special tokens inside the model. https://arxiv.org/abs/2610.41291
+
+Memory
+Good papers to start with
+MemGPT (Oct 2023): Treats memory like an operating system that moves text in and out of the model's view. https://arxiv.org/abs/2310.08560
+
+Generative Agents (Apr 2023): Simulated people remember events, reflect on them and plan their days. https://arxiv.org/abs/2304.03442
+
+Survey of Agent Memory (Apr 2024): A map of the ways agents store and use memory. https://arxiv.org/abs/2404.13501
+
+HippoRAG (May 2024): Uses a knowledge graph, inspired by the brain, as long-term memory. https://arxiv.org/abs/2405.14831
+
+LoCoMo (Feb 2024): Tests memory on very long conversations. https://arxiv.org/abs/2402.17753
+
+Building memory
+General Agentic Memory (Nov 2025): Does a small research task at question time instead of relying only on stored notes. https://arxiv.org/abs/2511.18423
+
+RecMem (May 2026): Combines repeated memories and cuts the cost of building memory by up to 87%. https://arxiv.org/abs/2605.16045
+
+Accurate and Efficient Memory (May 2026): Catches 66% of planted conflicting facts, 4.7 times the best baseline. https://arxiv.org/abs/2607.16211
+
+Memory as Recommendation (Oct 2026): Picks memories for each request the way a recommender system picks items. https://arxiv.org/abs/2610.34673
+
+Belief Memory (May 2026): Stores probabilities instead of one fixed fact when the agent cannot see everything. https://arxiv.org/abs/2605.05583
+
+Executable Agentic Memory (May 2026): A phone or desktop agent saves steps it can replay and uses 6x fewer tokens than GPT-4o. https://arxiv.org/abs/2605.12294
+
+The Compaction Cliff (Aug 2026): Rules and logs get summarized at the same rate, so important rules can be lost. https://arxiv.org/abs/2608.22752
+
+Memory that learns
+MemEvolve (Dec 2025): Evolves the design of the memory system itself, with gains of up to 17.06%. https://arxiv.org/abs/2512.18746
+
+MemSkill (Feb 2026): Learns its own ways of extracting memories instead of using fixed rules. https://arxiv.org/abs/2602.02474
+
+Evo-Memory (Nov 2025): Tests whether agents learn from experience during the test. https://arxiv.org/abs/2511.20857
+
+Self-Improving Agents at Test Time (Oct 2025): Agents learn while they are being used, with 68x fewer training samples. https://arxiv.org/abs/2510.07841
+
+Voyager (May 2023): A Minecraft agent that keeps learning new skills on its own. https://arxiv.org/abs/2305.16291
+
+Testing memory
+MemoryArena (Feb 2026): Agents that score well on recall tests do poorly when later tasks depend on earlier ones. https://arxiv.org/abs/2602.16313
+
+Recall to Forgetting (Apr 2026): Agents often reuse outdated memories after a person's situation changes. https://arxiv.org/abs/2604.20006
+
+Procedural Memory Benchmark (Nov 2025): Tests whether an agent can use a known skill in unfamiliar words. https://arxiv.org/abs/2511.21730
+
+SWE Context Bench (Feb 2026): Tests whether a coding agent benefits from what it learned on earlier tasks. https://arxiv.org/abs/2602.08316
+
+Coding agents
+Good papers to start with
+SWE-bench (Oct 2023): Asks whether models can fix real GitHub issues. https://arxiv.org/abs/2310.06770
+
+SWE-agent (May 2024): Shows that the commands you give an agent matter a lot. https://arxiv.org/abs/2405.15793
+
+OpenHands (Jul 2024): An open platform for building software agents. https://arxiv.org/abs/2407.16741
+
+Self-Debug (Apr 2023): A model explains its own code and uses the feedback to fix bugs. https://arxiv.org/abs/2304.05128
+
+Self-Evolving Coding Agents (Aug 2026): A survey of coding agents that change themselves. https://arxiv.org/abs/2608.03392
+
+Building coding agents
+RepairAgent (Mar 2024): An agent that fixes bugs on its own by choosing its next step. https://arxiv.org/abs/2403.17134
+
+Live-SWE-agent (Nov 2025): An agent improves its own code while it works on a task. https://arxiv.org/abs/2511.13646
+
+Atomic Skills (Apr 2026): Training on small skills raises average performance by 18.7%. https://arxiv.org/abs/2604.05013
+
+SWE-Router (Jun 2026): Sends easy steps to a cheaper model and keeps most of the performance. https://arxiv.org/abs/2607.00053
+
+SWE-Replay (Jan 2026): Reuses earlier attempts to make more tries cheaper. https://arxiv.org/abs/2601.22129
+
+Tokenomics (Jan 2026): Measures where tokens go, and points to refinement and verification. https://arxiv.org/abs/2601.14470
+
+Latent Programming Horizons (Jul 2026): Reads the model's internals to see how far ahead it is working. https://arxiv.org/abs/2607.05188
+
+Can Coding Agents Be General Agents? (Apr 2026): A coding agent handles simple business tasks and fails on complex ones. https://arxiv.org/abs/2604.13107
+
+Trusting coding benchmarks
+Test Overfitting (Nov 2025): Code can pass the visible tests and still be wrong. https://arxiv.org/abs/2511.16858
+
+Saving SWE-Bench (Oct 2025): Rewrites tasks to look like the way people really ask for help in chat. https://arxiv.org/abs/2510.08996
+
+Schrödinger's Code Repository (Aug 2026): Asks if models have memorized the popular repositories in the benchmark. https://arxiv.org/abs/2609.27891
+
+SWE-Bench Pro Verified (Sep 2026): Fixes flawed tasks and suggests that earlier scores were too high. https://arxiv.org/abs/2609.08149
+
+SWE-Bench Pro V2 (Oct 2026): A cleaner version whose Hard split spreads systems from 52.9% to 98.0%. https://arxiv.org/abs/2610.24206
+
+SWE-Lancer (Feb 2025): Tests models on real freelance jobs worth $1 million in total. https://arxiv.org/abs/2502.12115
+
+MLE-bench (Oct 2024): Tests agents on machine learning engineering tasks. https://arxiv.org/abs/2410.07095
+
+Task Flows (Oct 2026): Argues that coding benchmarks should match how users really work. https://arxiv.org/abs/2610.09633
+
+Agents in the real world
+Pull Requests on GitHub (Sep 2025): Studies how real projects accept agent code and what they revise. https://arxiv.org/abs/2509.14745
+
+Who Finishes the Job? (Sep 2026): 76.4% of checked fix pull requests were written entirely by agents. https://arxiv.org/abs/2609.26847
+
+Coding Manifests (Sep 2025): Studies the instruction files that projects write for Claude Code. https://arxiv.org/abs/2509.14744
+
+Research, web and computer use
+Good papers to start with
+WebGPT (Dec 2021): A model browses the web to answer questions, with human feedback. https://arxiv.org/abs/2112.09332
+
+WebArena (Jul 2023): Realistic websites where agents try to finish tasks. https://arxiv.org/abs/2307.13854
+
+OSWorld (Apr 2024): Tests agents on real desktop tasks. https://arxiv.org/abs/2404.07972
+
+Deep Research Survey (Nov 2025): A survey of agents that search and write long reports. https://arxiv.org/abs/2512.02038
+
+The AI Scientist (Aug 2024): An agent that comes up with ideas, runs experiments and writes the paper. https://arxiv.org/abs/2408.06292
+
+Deep research
+Self-Manager (Jan 2026): Runs several agent loops at once for long reports. https://arxiv.org/abs/2601.17879
+
+DeepDive (Sep 2025): Trains open search agents with knowledge graphs and reinforcement learning. https://arxiv.org/abs/2509.10446
+
+DR-Venus (Apr 2026): Builds a research agent from a small model with very little data. https://arxiv.org/abs/2604.19859
+
+SAGE (Feb 2026): Tests how well retrieval works for research agents and shows how to improve it. https://arxiv.org/abs/2602.05975
+
+DRNOISE (Jul 2026): Tests agents on ordinary-looking web pages that contain misleading evidence. https://arxiv.org/abs/2607.17291
+
+IDRBench (Jan 2026): Being able to ask for clarification helps in 74.4% of cases and hurts in 19.9%. https://arxiv.org/abs/2601.06676
+
+Harness-1 (Jun 2026): Trains a search agent that keeps its notes outside the transcript. https://arxiv.org/abs/2606.02373
+
+Web agents
+Mind2Web (Jun 2023): A dataset of tasks on real websites. https://arxiv.org/abs/2306.06070
+
+Prune4Web (Nov 2025): Cuts pages down to the useful parts and raises one accuracy score from 46.8% to 88.28%. https://arxiv.org/abs/2511.21398
+
+WALT (Oct 2025): Turns website actions into reusable tools. https://arxiv.org/abs/2510.01524
+
+Compile-and-Execute (May 2026): Argues that web agents should plan the whole job up front instead of reacting step by step. https://arxiv.org/abs/2605.14290
+
+Odysseys (Apr 2026): Tests web agents on long tasks across many sites. https://arxiv.org/abs/2604.24964
+
+Computer use
+AppAgent (Dec 2023): An agent that learns to use smartphone apps. https://arxiv.org/abs/2312.13771
+
+Scaling Agents for Computer Use (Oct 2025): Runs many attempts at once and picks the best with a judge. https://arxiv.org/abs/2510.02250
+
+GroundNext (Nov 2025): Learns from human demonstrations where to click. https://arxiv.org/abs/2511.07332
+
+VideoAgentTrek (Oct 2025): Turns online screen videos into training data, raising accuracy from 64.1% to 69.3%. https://arxiv.org/abs/2510.19488
+
+Reliability of Computer Use Agents (Apr 2026): The same agent acts differently across repeated runs. https://arxiv.org/abs/2604.17849
+
+Multi-Agent Computer Use (Jun 2026): Several agents split a long computer task. https://arxiv.org/abs/2606.01533
+
+CUA-Recovery (Oct 2026): Tests how well agents recover from errors on long computer tasks. https://arxiv.org/abs/2610.27645
+
+AI scientists
+Kosmos (Nov 2025): An AI scientist that reports reproduced findings and new contributions. https://arxiv.org/abs/2511.02824
+
+Reasoning Scientifically (Apr 2026): AI scientists can produce results without following scientific reasoning. https://arxiv.org/abs/2604.18805
+
+Recursive Self-Improvement (Sep 2026): A research agent improves its own research efficiency. https://arxiv.org/abs/2609.26457
+
+Replicating Research (Aug 2026): Trains agents to reproduce the results of papers. https://arxiv.org/abs/2608.13331
+
+AutoLLMResearch (May 2026): Trains agents to choose settings for LLM experiments. https://arxiv.org/abs/2605.11518
+
+MLGym (Feb 2025): A framework and benchmark for AI research agents. https://arxiv.org/abs/2502.14499
+
+Many agents together
+Good papers to start with
+AutoGen (Aug 2023): A framework where agents solve tasks by talking to each other. https://arxiv.org/abs/2308.08155
+
+MetaGPT (Aug 2023): Agents take software company roles and follow set procedures. https://arxiv.org/abs/2308.00352
+
+ChatDev (Jul 2023): Agents talk through the steps of building software. https://arxiv.org/abs/2307.07924
+
+Multi-Agent Debate (May 2023): Models debate an answer, which improves facts and reasoning. https://arxiv.org/abs/2305.14325
+
+Mixture-of-Agents (Jun 2024): Several models answer in layers and build on each other's work. https://arxiv.org/abs/2406.04692
+
+Orchestrating helpers
+Subagents vs Agent Skills (Sep 2026): Subagents can use reusable knowledge well, but coordinating them costs extra tokens. https://arxiv.org/abs/2609.09233
+
+MS-Eval (Oct 2026): Delegation pays off with context offloading and real parallel work, and otherwise wastes tokens. https://arxiv.org/abs/2610.22869
+
+PerspectiveGap (Jun 2026): Tests whether a model knows what each helper needs to be told. https://arxiv.org/abs/2606.08878
+
+The Conductor (Dec 2025): Uses reinforcement learning to teach a model to coordinate other models. https://arxiv.org/abs/2512.04388
+
+Reward Modeling for Orchestration (Jun 2026): Trains an orchestrator with a model of what good orchestration looks like. https://arxiv.org/abs/2606.13598
+
+Blackboard System (Sep 2025): Agents share a common board and do 13% to 57% better than strong baselines. https://arxiv.org/abs/2510.01285
+
+Working together
+Reliability Limits (Mar 2026): Uses theory to show the limits of handing planning to several agents. https://arxiv.org/abs/2603.26993
+
+Decision Protocols (Jul 2026): Compares ways for agents to reach a decision, and more varied answers help. https://arxiv.org/abs/2607.05477
+
+Open-Ended Coordination (Jun 2026): Tests how agents communicate, split roles and follow shared plans over long tasks. https://arxiv.org/abs/2606.08340
+
+MultiAgentBench (Mar 2025): Tests how agents collaborate and compete. https://arxiv.org/abs/2503.01935
+
+Finding what went wrong
+Who Broke the System? (Jul 2026): Finds which agent and which step caused a failure. https://arxiv.org/abs/2607.07989
+
+Cascade Failure Attribution (Aug 2026): Traces failures through levels of agents and improves agent-level accuracy by 11.2%. https://arxiv.org/abs/2608.29646
+
+Agent-as-a-Judge (Oct 2024): Uses agents to judge the work of other agents. https://arxiv.org/abs/2410.10934
+
+Training and testing agents
+Good papers to start with
+Agentic RL Survey (Sep 2025): A survey of more than 500 works on agentic reinforcement learning. https://arxiv.org/abs/2509.02547
+
+Demystifying RL in Agentic Reasoning (Oct 2025): Recipes that let 4B models beat 32B models at agentic reasoning. https://arxiv.org/abs/2510.11701
+
+AgentBench (Aug 2023): Tests models as agents across several environments. https://arxiv.org/abs/2308.03688
+
+GAIA (Nov 2023): Questions that are easy for people and hard for AI assistants. https://arxiv.org/abs/2311.12983
+
+Measuring Long Software Tasks (Mar 2025): Measures how long a task AI can finish, using the time a person takes. https://arxiv.org/abs/2503.14499
+
+Practice with reinforcement learning
+ProRL Agent (Mar 2026): A rollout service for reinforcement learning on multi-turn agents. https://arxiv.org/abs/2603.18815
+
+AEM (May 2026): Adjusts exploration during training across models from 1.5B to 32B. https://arxiv.org/abs/2605.00425
+
+Productive Exploration (Oct 2026): Helps agents avoid repeating useless actions during training. https://arxiv.org/abs/2610.25957
+
+Tool-R1 (Sep 2025): Learns tool use from a small number of samples. https://arxiv.org/abs/2509.12867
+
+Agent World Model (Feb 2026): Trains in synthetic environments and generalizes to tasks it has not seen. https://arxiv.org/abs/2602.10090
+
+Single-Rollout Optimization (Jul 2026): Updates a model after each rollout instead of waiting for a whole batch. https://arxiv.org/abs/2607.07508
+
+Spurious Tool Use (Sep 2026): Agents can learn to call tools for the wrong reason, and a reward for necessary calls helps. https://arxiv.org/abs/2609.16268
+
+Learning from recorded runs
+Tune the Environment (Oct 2025): Trains by exploring an environment instead of copying fixed runs. https://arxiv.org/abs/2510.10197
+
+Trajectory Refinement (Sep 2026): Removes useless rounds and cuts inference tokens by up to about 48%. https://arxiv.org/abs/2609.18417
+
+Agent Data Protocol (Oct 2025): Puts agent datasets in one format for fine-tuning. https://arxiv.org/abs/2510.24702
+
+PG-SFT (Oct 2026): Teaches new agent skills while keeping what the model already knew. https://arxiv.org/abs/2610.00949
+
+Palmyra x6 (Aug 2026): A model post-trained for tool use that scores 0.785 on BFCL Core. https://arxiv.org/abs/2608.16620
+
+Cross-Benchmark Generalization (Jul 2026): Post-training on long multi-tool tasks can change habits that carry over to other tasks. https://arxiv.org/abs/2608.00181
+
+Benchmarks for real work
+AgentBoard (Jan 2024): Shows how agents do step by step across several task types. https://arxiv.org/abs/2401.13178
+
+τ-bench (Jun 2024): Tests agents that talk to users and use tools under real policies. https://arxiv.org/abs/2406.12045
+
+AppWorld (Jul 2024): A world of apps and people for testing tool use and code. https://arxiv.org/abs/2407.18901
+
+TheAgentCompany (Dec 2024): Tests agents on the work of a simulated company. https://arxiv.org/abs/2412.14161
+
+OmegaUse-OfficeVal (Jul 2026): Agents finish office tasks faster than workers, without reaching their quality. https://arxiv.org/abs/2607.27155
+
+AutoVend (Oct 2026): Tests agents running a vending business over a long period. https://arxiv.org/abs/2610.36980
+
+Holistic Agent Leaderboard (Oct 2025): Shared infrastructure for fair and repeatable agent evaluation. https://arxiv.org/abs/2510.11977
+
+Test-Time Scaling of General Agents (Feb 2026): Finds two limits: more steps stop helping, and agents struggle to check parallel attempts. https://arxiv.org/abs/2602.18998
+
+Time horizons
+Validity of Time Horizons (Oct 2026): A statistical look at METR's time-horizon measure. https://arxiv.org/abs/2610.12466
+
+Forecasting Time Horizons (Nov 2025): Slower compute growth could delay long-task ability, by 7 years in one case. https://arxiv.org/abs/2511.19492
+
+Think Fast (Jun 2026): Estimates how long a task models can do without written reasoning: over 7 minutes by 2028. https://arxiv.org/abs/2606.07157
+
+Big surveys
+Autonomous Agents Survey (Aug 2023): A survey of how LLM agents are built and used. https://arxiv.org/abs/2308.11432
+
+Rise and Potential of LLM Agents (Sep 2023): A wide survey of agent design and uses. https://arxiv.org/abs/2309.07864
+
+Start your first project
+Code you can run
+ReAct: The original code for the basic agent loop, and short enough to read. https://github.com/ysymyth/ReAct
+
+smolagents: A small library for agents that think in code. https://github.com/huggingface/smolagents
+
+OpenAI Agents SDK: A lightweight framework for multi-agent workflows. https://github.com/openai/openai-agents-python
+
+LangGraph: Builds agents as graphs of steps that can resume after failures. https://github.com/langchain-ai/langgraph
+
+AutoGen: A framework for agents that work together. https://github.com/microsoft/autogen
+
+Pydantic AI: Builds agents in Python with checked inputs and outputs. https://github.com/pydantic/pydantic-ai
+
+MCP Servers: Example servers that connect tools to a model through MCP. https://github.com/modelcontextprotocol/servers
+
+Agent Skills: Example skills you can read and copy. https://github.com/anthropics/skills
+
+Letta: Builds agents with long-term memory, from the MemGPT team. https://github.com/letta-ai/letta
+
+SWE-agent: Takes a GitHub issue and tries to fix it. https://github.com/SWE-agent/SWE-agent
+
+OpenHands: An open platform for AI software development. https://github.com/OpenHands/OpenHands
+
+Aider: Pair programming with a model in your terminal. https://github.com/Aider-AI/aider
+
+Codex CLI: A coding agent that runs in your terminal. https://github.com/openai/codex
+
+Claude Code: A coding agent that lives in your terminal and understands your codebase. https://github.com/anthropics/claude-code
+
+Browser Use: A Python library that lets agents use a web browser. https://github.com/browser-use/browser-use
+
+STORM: Researches a topic and writes a long article with citations. https://github.com/stanford-oval/storm
+
+MetaGPT: Agents that act as a small software company. https://github.com/FoundationAgents/MetaGPT
+
+SWE-bench: Runs the benchmark of real GitHub issues. https://github.com/SWE-bench/SWE-bench
+
+MLE-bench: Tests agents on machine learning tasks. https://github.com/openai/mle-bench
+
+AgentBench: Tests models as agents across several environments. https://github.com/THUDM/AgentBench
+
+Some questions for inspiration
+Does a shorter tool list help?: Give one small agent 5, 50 and 500 tools, then count how often it picks the right one. https://arxiv.org/abs/2605.26165
+
+How much context can an agent lose?: Summarize old steps at several strengths on the same tasks, then plot success against tokens saved. https://arxiv.org/abs/2609.32961
+
+Does memory help on a repeated task?: Run an agent twice on similar tasks with and without notes from the first run, then compare. https://arxiv.org/abs/2511.20857
+
+Does a coding score survive renaming?: Rename the files and variables in a few benchmark tasks, then compare the agent's scores before and after. https://arxiv.org/abs/2609.27891
+
+When is a helper worth its tokens?: Run the same tasks with and without a subagent, then compare success and tokens used. https://arxiv.org/abs/2610.22869

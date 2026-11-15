@@ -1,0 +1,459 @@
+LLM Post-training
+
+Post-training turns a model that only continues text into a useful assistant. For example, a pre-trained model given "Write a poem about cats" may just write more requests like it, while a post-trained model writes the poem. This map covers fine-tuning, preference data, reinforcement learning and reasoning. Reading raw text is in the LLM Pre-training map.
+
+Each paper below has an arXiv link and one simple sentence. Results are the numbers the authors report, and they were not rerun here. Links were checked against arXiv on November 2, 2026.
+
+The 7 branches
+Fine-tuning: Training on examples of instructions and good answers. First paper: Finetuned Language Models Are Zero-Shot Learners.
+
+Preference data and RLHF: Teaching a model from which of two answers people liked more. First paper: InstructGPT.
+
+Reinforcement learning: Letting a model try answers and learn from a score. First paper: DeepSeek-R1.
+
+Reasoning: Getting a model to think in steps, and only as long as it needs. First paper: Chain-of-Thought Prompting.
+
+Data for post-training: Choosing which problems the model practices and in what order. First paper: Reasoning Curriculum.
+
+Measuring the result: Tests that say whether post-training helped. First paper: the MATH dataset.
+
+Character and behaviour: The way a model acts, including habits such as agreeing too much. First paper: Constitutional AI.
+
+Words you will see
+Fine-tuning: training an existing model a bit more on new examples.
+
+Supervised fine-tuning: fine-tuning on fixed examples with known good answers.
+
+LoRA: a small add-on that is trained instead of the full model.
+
+Forgetting: when learning something new damages a skill the model already had.
+
+Preference data: pairs of answers where someone marked the better one.
+
+Reward model: a model that gives an answer a score, trained to match people's preferences.
+
+RLHF: reinforcement learning from human feedback, which raises the score from a reward model.
+
+DPO: direct preference optimization, which learns from preference data with no reward model.
+
+Reinforcement learning: learning by trying things and getting a score.
+
+Rollout: one answer the model produces during training.
+
+RLVR: reinforcement learning with verifiable rewards, where a program checks whether the answer is right.
+
+PPO and GRPO: two popular reinforcement learning rules. GRPO compares each answer with others for the same question.
+
+Chain of thought: the steps a model writes out before its final answer.
+
+Overthinking: writing far more reasoning steps than the problem needs.
+
+Test-time compute: extra work spent while answering, such as thinking longer.
+
+Distillation: training one model to copy another model's outputs.
+
+Reward hacking: getting a high score without really doing the task.
+
+Sycophancy: agreeing with the user even when the user is wrong.
+
+Fine-tuning
+Good papers to start with
+Finetuned Language Models (Sep 2021): Showed that fine-tuning on instructions helps a model handle tasks it has not seen. https://arxiv.org/abs/2109.01652
+
+Scaling Instruction-Finetuned Models (Oct 2022): Studies what happens as instruction fine-tuning moves to larger models. https://arxiv.org/abs/2210.11416
+
+Self-Instruct (Dec 2022): Has a model write its own instruction data. https://arxiv.org/abs/2212.10560
+
+LoRA (Jun 2021): Trains small add-on matrices instead of all the weights. https://arxiv.org/abs/2106.09685
+
+QLoRA (May 2023): Uses LoRA on a compressed model, so that a large model needs less memory. https://arxiv.org/abs/2305.14314
+
+LIMA (May 2023): Shows that a small set of carefully chosen examples can go a long way. https://arxiv.org/abs/2305.11206
+
+Llama 2 (Jul 2023): Describes in full how a chat model was fine-tuned and made safer. https://arxiv.org/abs/2307.09288
+
+Tulu 3 (Nov 2024): An open post-training recipe with its data and code. https://arxiv.org/abs/2411.15124
+
+Instruction data
+WizardLM (Apr 2023): Rewrites instructions step by step to make them harder. https://arxiv.org/abs/2304.12244
+
+Orca (Jun 2023): Learns from a stronger model's step-by-step explanations. https://arxiv.org/abs/2306.02707
+
+Zephyr (Oct 2023): A recipe that aligns a small model using data from larger models and DPO. https://arxiv.org/abs/2310.16944
+
+FineInstructions (Jan 2026): Turns web text into synthetic instructions, so that a model can train on instructions from the very start. https://arxiv.org/abs/2601.22146
+
+Noisy instructions (Oct 2025): Finds that perturbed instructions in training help a model handle messy user input. https://arxiv.org/abs/2510.03528
+
+Avoiding model collapse (Jul 2026): Keeps quality from falling when each new model learns from data made by the last one. https://arxiv.org/abs/2607.17043
+
+Only direction matters (Sep 2026): Argues that fine-tuning depends on how a model changes, not only on how much. https://arxiv.org/abs/2609.13680
+
+Mid-training
+ReMiT (Feb 2026): Feeds lessons from post-training back into mid-training, for gains of over 2%. https://arxiv.org/abs/2602.03075
+
+daVinci-Dev (Jan 2026): Mid-training for software agents, using 73.1B tokens. https://arxiv.org/abs/2601.18418
+
+Model Spec Midtraining (May 2026): First teaches the model what its behaviour rules mean, so that later training generalizes better. https://arxiv.org/abs/2605.02087
+
+Forgetting
+Sharpness-Aware Pretraining (May 2026): A short SAM stage cuts forgetting by 31% after post-training. https://arxiv.org/abs/2605.02105
+
+Why fine-tuning forgets (Jan 2026): Looks inside models to find why new tasks damage old skills. https://arxiv.org/abs/2601.18699
+
+On-Policy Replay (May 2026): Reduces forgetting by replaying earlier tasks with the model's own answers. https://arxiv.org/abs/2605.29495
+
+Learning without Overwriting (Oct 2026): A theory of why self-distillation can keep old knowledge while adding reasoning. https://arxiv.org/abs/2610.05200
+
+Preference data and RLHF
+Good papers to start with
+Deep RL from Human Preferences (Jun 2017): Taught agents from people choosing the better of two short clips. https://arxiv.org/abs/1706.03741
+
+Fine-Tuning from Human Preferences (Sep 2019): Applied the same idea to language models. https://arxiv.org/abs/1909.08593
+
+Learning to summarize (Sep 2020): Used human preferences to train a much better summarizer. https://arxiv.org/abs/2009.01325
+
+InstructGPT (Mar 2022): The method behind modern assistants, with fine-tuning followed by RLHF. https://arxiv.org/abs/2203.02155
+
+Helpful and Harmless (Apr 2022): Trains an assistant with RLHF and studies the balance between the two goals. https://arxiv.org/abs/2204.05862
+
+DPO (May 2023): Learns from preference data directly, with no reward model. https://arxiv.org/abs/2305.18290
+
+Open Problems of RLHF (Jul 2023): A map of what RLHF cannot yet do. https://arxiv.org/abs/2307.15217
+
+Other objectives
+IPO (Oct 2023): A general theory of learning from preferences, with a fix for a weakness of DPO. https://arxiv.org/abs/2310.12036
+
+ORPO (Mar 2024): Trains on instructions and preferences together, with no reference model. https://arxiv.org/abs/2403.07691
+
+KTO (Feb 2024): Learns from simple good or bad labels instead of pairs. https://arxiv.org/abs/2402.01306
+
+Is DPO superior to PPO? (Apr 2024): Compares the two methods side by side. https://arxiv.org/abs/2404.10719
+
+Self-Rewarding Language Models (Jan 2024): A model acts as its own judge and improves from its own scores. https://arxiv.org/abs/2401.10020
+
+When are two objectives the same? (Sep 2025): Finds that most proposed preference objectives are the same formula written differently. https://arxiv.org/abs/2509.11298
+
+Failure modes of maximum entropy (Sep 2025): Shows why a reference-free method can do well offline and struggle online. https://arxiv.org/abs/2509.20265
+
+Adaptive Margin RLHF (Sep 2025): Learns how far apart two answers should be scored. https://arxiv.org/abs/2509.22851
+
+Preference Packing (Feb 2026): Packs batches to cut training time by at least 37%. https://arxiv.org/abs/2602.24082
+
+Theory
+Mathematical foundations (Oct 2026): An introduction to the math behind aligning models with feedback. https://arxiv.org/abs/2610.31862
+
+Statistical theory for DPO (Oct 2026): Studies how much DPO suffers when its modeling assumption is wrong. https://arxiv.org/abs/2610.25856
+
+Greedy sampling (Oct 2025): Proves that simple greedy sampling is enough for efficient RLHF. https://arxiv.org/abs/2510.24700
+
+Reward uncertainty (Jun 2026): Shows that many rules for reward uncertainty come from one expression. https://arxiv.org/abs/2606.09073
+
+Reward models
+Scaling Laws for Overoptimization (Oct 2022): Measures how pushing too hard on a reward model hurts real quality. https://arxiv.org/abs/2210.10760
+
+Fine-Grained Human Feedback (Jun 2023): Gives feedback on parts of an answer instead of the whole answer. https://arxiv.org/abs/2306.01693
+
+What do reward models memorize? (Jul 2026): Finds that reward models spend memorization on easy, high-margin preference pairs. https://arxiv.org/abs/2607.24484
+
+Reward models inherit biases (Jan 2026): Shows that reward models carry value biases from the model they start from. https://arxiv.org/abs/2601.20838
+
+Feedback in natural language (Jan 2026): Trains reward models on people's written feedback instead of binary labels. https://arxiv.org/abs/2601.07349
+
+Preference data
+UltraFeedback (Oct 2023): A large preference dataset labelled by AI instead of people. https://arxiv.org/abs/2310.01377
+
+ActiveUltraFeedback (Mar 2026): Uses active learning to choose which preference data to generate. https://arxiv.org/abs/2603.09692
+
+Valuable preference data (Oct 2025): Studies which preference examples help most, and gets similar results with less data. https://arxiv.org/abs/2510.13212
+
+Clean first, align later (Sep 2025): A benchmark of ways to clean noisy preference data. https://arxiv.org/abs/2509.23564
+
+What's in my human feedback? (Oct 2025): Describes in readable form what a preference dataset actually encodes. https://arxiv.org/abs/2510.26202
+
+AlignDiff (Sep 2026): Uses signals from inside the model to choose better preference data. https://arxiv.org/abs/2609.05899
+
+Reinforcement learning
+Good papers to start with
+PPO (Jul 2017): The classic rule that most language model reinforcement learning builds on. https://arxiv.org/abs/1707.06347
+
+Process and outcome feedback (Nov 2022): Compares rewarding each step with rewarding only the final answer. https://arxiv.org/abs/2211.14275
+
+Let's Verify Step by Step (May 2023): Shows that checking each step beats checking only the final answer. https://arxiv.org/abs/2305.20050
+
+DeepSeekMath (Feb 2024): Introduced GRPO, now the most studied rule for reasoning. https://arxiv.org/abs/2402.03300
+
+DeepSeek-R1 (Jan 2025): Showed that reinforcement learning with verifiable rewards can produce strong reasoning. https://arxiv.org/abs/2501.12948
+
+Demystifying RL post-training (Aug 2026): A primer for people who are new to this area. https://arxiv.org/abs/2608.24949
+
+Understanding Reasoning (Jul 2026): Connects pre-training with reinforcement learning in a controlled test. https://arxiv.org/abs/2607.16097
+
+How GRPO works
+One number (Jun 2026): Shows that GRPO, Dr. GRPO and DAPO all adjust the same standard deviation. https://arxiv.org/abs/2607.00152
+
+GRPO is secretly a process reward model (Sep 2025): Finds that GRPO already gives credit to individual steps. https://arxiv.org/abs/2509.21154
+
+Spurious advantage (Sep 2026): Finds a flaw in how GRPO scores each rollout and offers a fix. https://arxiv.org/abs/2609.04063
+
+λ-GRPO (Oct 2025): Unifies GRPO versions by learning how much each token should count. https://arxiv.org/abs/2510.06870
+
+Mu-GRPO (May 2026): Reuses older rollouts for about 2x faster training. https://arxiv.org/abs/2605.17570
+
+GRPO beyond English (Aug 2026): A large study of GRPO in other languages. https://arxiv.org/abs/2608.13698
+
+Other rules
+Single-stream Policy Optimization (Sep 2025): Removes GRPO's groups and treats each answer on its own. https://arxiv.org/abs/2509.13232
+
+Soft Adaptive Policy Optimization (Nov 2025): Makes token-level updates more stable. https://arxiv.org/abs/2511.20347
+
+Trust-Region Adaptive Policy Optimization (Dec 2025): Merges fine-tuning and reinforcement learning into one stage. https://arxiv.org/abs/2512.17636
+
+FlowRL (Sep 2025): Matches the whole reward distribution instead of only maximizing reward. https://arxiv.org/abs/2509.15207
+
+CLIPO (Mar 2026): Adds contrastive learning, so that answers are not judged only by the final result. https://arxiv.org/abs/2603.10101
+
+Distilled RL (Jul 2026): Combines reinforcement learning with on-policy distillation. https://arxiv.org/abs/2607.17247
+
+ExTra (Jun 2026): Adds exploration signals for prompts that are too easy or too hard. https://arxiv.org/abs/2606.24994
+
+Promising tokens (Feb 2026): Limits learning to a smaller set of likely tokens instead of the full vocabulary. https://arxiv.org/abs/2602.03195
+
+Evolution strategies (Sep 2025): Fine-tunes a model with no backpropagation at all. https://arxiv.org/abs/2509.24372
+
+Consolidating perturbations (May 2026): Merges random weight changes that scored well into one model, gaining 6.5 points over using one. https://arxiv.org/abs/2605.31494
+
+Coupled variational RL (Dec 2025): Improves reasoning with no verifier, with a 2.3% gain over similar methods. https://arxiv.org/abs/2512.12576
+
+Scaling reinforcement learning
+The Art of Scaling RL Compute (Oct 2025): Gives a recipe for predicting how reinforcement learning scales with compute. https://arxiv.org/abs/2510.13786
+
+BroRL (Oct 2025): Keeps improving by using more parallel rollouts after training has stalled. https://arxiv.org/abs/2510.01180
+
+Larger batches (Aug 2026): Finds that larger batches cut time to target by up to 29% only if the learning rate is retuned. https://arxiv.org/abs/2608.29296
+
+Predictable dynamics (Oct 2025): Studies how predictable weight changes are during reinforcement learning. https://arxiv.org/abs/2510.00553
+
+RLVE (Nov 2025): Uses environments that generate new problems and check the answers automatically. https://arxiv.org/abs/2511.07317
+
+Reinforcement Learning on Pre-Training Data (Sep 2025): Applies reinforcement learning to raw pre-training text. https://arxiv.org/abs/2509.19249
+
+Small models (Jul 2026): Studies why reinforcement learning is unstable on models of 70 to 500M parameters. https://arxiv.org/abs/2607.25091
+
+Tandem RLVR (Jun 2026): Trains a model together with a weaker partner, so that it keeps working with weaker models. https://arxiv.org/abs/2606.28166
+
+GlyphBench (Sep 2026): A playground of over 360 game tasks for training language model agents. https://arxiv.org/abs/2609.34214
+
+Reward hacking
+EvilGenie (Nov 2025): A benchmark that tests whether coding agents cheat, such as by hardcoding tests. https://arxiv.org/abs/2511.21654
+
+Cheap Reward Hacking Detection (Jun 2026): Detects cheating with a small model at a much lower cost. https://arxiv.org/abs/2606.08893
+
+Side-effect loopholes (Oct 2026): Finds runs that do the task, cause a side effect and still pass the check. https://arxiv.org/abs/2610.09142
+
+Composite rewards (Sep 2025): Adds checks to the reward so that cheating pays less. https://arxiv.org/abs/2509.15557
+
+Reasoning Arena (Jun 2026): Runs tournaments between answers when the reward gives no useful signal, saving nearly 50% of generation compute. https://arxiv.org/abs/2606.09380
+
+Reasoning
+Good papers to start with
+Chain-of-Thought Prompting (Jan 2022): Showed that writing out steps helps models solve harder problems. https://arxiv.org/abs/2201.11903
+
+Zero-Shot Reasoners (May 2022): Found that asking a model to think step by step can be enough. https://arxiv.org/abs/2205.11916
+
+Self-Consistency (Mar 2022): Samples several answers and picks the most common one. https://arxiv.org/abs/2203.11171
+
+Tree of Thoughts (May 2023): Searches through possible reasoning steps like a tree. https://arxiv.org/abs/2305.10601
+
+STaR (Mar 2022): Trains a model on its own reasoning when the final answer was right. https://arxiv.org/abs/2203.14465
+
+Scaling Test-Time Compute (Aug 2024): Compares spending more compute while answering with using a larger model. https://arxiv.org/abs/2408.03314
+
+s1 (Jan 2025): A very cheap way to get reasoning, by making a model keep thinking. https://arxiv.org/abs/2501.19393
+
+SCoRe (Sep 2024): Uses reinforcement learning to teach a model to correct its own mistakes. https://arxiv.org/abs/2409.12917
+
+Thinking LLMs (Oct 2024): Teaches a model to write thoughts before answering, for general tasks. https://arxiv.org/abs/2410.10630
+
+Overthinking
+SWAP (Feb 2026): Penalizes wasteful steps, cutting reasoning length by 64.3% while raising accuracy by 5.7%. https://arxiv.org/abs/2603.00296
+
+Explore Briefly, Then Decide (Oct 2025): Cuts average response length by up to 71% on simpler datasets. https://arxiv.org/abs/2510.02249
+
+Reasoning Shaping (Oct 2025): Shapes rewards to reduce wasted reasoning, especially on harder problems. https://arxiv.org/abs/2510.09535
+
+Decoupled rewards (Sep 2025): Separates rewards and schedules easy problems to cut overthinking. https://arxiv.org/abs/2509.25827
+
+Stop Unnecessary Reflection (Feb 2026): Cuts length by 35.0% on a 7B model while gaining 2.7% accuracy. https://arxiv.org/abs/2602.12113
+
+The Art of Efficient Reasoning (Feb 2026): Studies data, reward and optimization for short answers on models from 0.6B to 30B. https://arxiv.org/abs/2602.20945
+
+Efficient reasoning via reward model (Nov 2025): Uses a reward model to favour short, correct reasoning. https://arxiv.org/abs/2511.09158
+
+Why reasoning length converges (Sep 2025): Explains why reasoning stops getting longer during reinforcement learning. https://arxiv.org/abs/2509.04027
+
+Does verbose reasoning help? (Jun 2026): Tests whether the content of steps matters or only their number. https://arxiv.org/abs/2606.30128
+
+Backtracking bursts (May 2026): Separates useful self-correction from unproductive revising. https://arxiv.org/abs/2605.27965
+
+Decomposing efficiency (Feb 2026): Shows why accuracy per token hides different kinds of waste. https://arxiv.org/abs/2602.09805
+
+Length penalties (Jul 2026): Finds that length penalties make a model's reasoning harder to monitor. https://arxiv.org/abs/2607.09786
+
+Self-correction
+Step-level self-correction (Aug 2026): Uses reinforcement learning on single steps to help models fix their own errors. https://arxiv.org/abs/2608.11573
+
+CorrectBench (Oct 2025): A benchmark of self-correction methods. https://arxiv.org/abs/2510.16062
+
+Effective Reflection (Jan 2026): Teaches models which kinds of reflection really help. https://arxiv.org/abs/2601.12720
+
+A* post-training (May 2026): Treats reasoning as a search problem, using ideas from classical search. https://arxiv.org/abs/2605.24597
+
+Test-time compute
+Test-Time Compute Games (Jan 2026): Studies how providers may profit when models think for longer. https://arxiv.org/abs/2601.21839
+
+Adaptive allocation (Feb 2026): Spends compute where a verifier says it is most useful. https://arxiv.org/abs/2602.01070
+
+FEval-TTC (Nov 2025): A fair way to compare these methods as models and prices change. https://arxiv.org/abs/2511.01203
+
+Data for post-training
+Curriculum
+Reasoning Curriculum (Oct 2025): Starts reinforcement learning on math, then moves to broader tasks. https://arxiv.org/abs/2510.26143
+
+TACLer (Jan 2026): A tailored curriculum that improves accuracy by over 9% on the base model. https://arxiv.org/abs/2601.21711
+
+Provable benefits of autocurriculum (Mar 2026): Gives a theory of why choosing data automatically helps. https://arxiv.org/abs/2603.18325
+
+Closed-loop curriculum (Oct 2026): Finds that GRPO learns best from problems of intermediate difficulty. https://arxiv.org/abs/2610.39056
+
+Prioritized Replay (Jan 2026): Picks problems that the model gets right only some of the time. https://arxiv.org/abs/2601.02648
+
+Adaptive Data Scheduling (Jun 2026): Changes the order of training data instead of sampling it uniformly. https://arxiv.org/abs/2606.22305
+
+Limited data
+Survey on data scarcity (Apr 2026): An overview of reinforcement learning when data is limited. https://arxiv.org/abs/2604.17312
+
+One sample (Jan 2026): Trains reasoning from an extremely small and carefully built set of samples. https://arxiv.org/abs/2601.03111
+
+CPMobius (Feb 2026): A coach model writes problems for a player model, so that no outside data is needed. https://arxiv.org/abs/2602.02979
+
+Data left behind (Nov 2025): Reuses training signals that GRPO family methods throw away. https://arxiv.org/abs/2511.04800
+
+Too Correct to Learn (Apr 2026): Fixes the lack of signal when strong models already solve standard problems. https://arxiv.org/abs/2604.18493
+
+Distillation
+False Promise of Imitating (May 2023): Shows the limits of copying the outputs of a stronger model. https://arxiv.org/abs/2305.15717
+
+Does self-distillation improve reasoning? (Oct 2026): Tests recent claims and finds that using privileged information well is still an open problem. https://arxiv.org/abs/2610.18613
+
+Scale or Reason? (Sep 2025): Compares costs and finds that mixing in 25-50% reasoning data captures most of the benefit. https://arxiv.org/abs/2509.22193
+
+Reflective self-distillation (May 2026): Keeps reasoning varied and training stable. https://arxiv.org/abs/2605.28014
+
+Behavioral shadows (Sep 2026): Finds that models can pass on skills through unrelated text. https://arxiv.org/abs/2609.29233
+
+Measuring the result
+Good papers to start with
+MMLU (Sep 2020): A general knowledge test across many subjects. https://arxiv.org/abs/2009.03300
+
+MATH (Mar 2021): A dataset of competition math problems. https://arxiv.org/abs/2103.03874
+
+GSM8K (Oct 2021): School math word problems, along with the idea of training verifiers. https://arxiv.org/abs/2110.14168
+
+Codex (Jul 2021): Introduced HumanEval, a coding test with real program checks. https://arxiv.org/abs/2107.03374
+
+IFEval (Nov 2023): Tests instructions that a program can check, such as a word limit. https://arxiv.org/abs/2311.07911
+
+MT-Bench (Jun 2023): Uses a strong model as a judge for chat answers. https://arxiv.org/abs/2306.05685
+
+Chatbot Arena (Mar 2024): Ranks models from people's votes between two answers. https://arxiv.org/abs/2403.04132
+
+New tests
+FrontierMath Erdős (Sep 2026): 68 open math problems, where the best of five systems scored 3%. https://arxiv.org/abs/2609.25050
+
+HLE-Verified (Feb 2026): Checks and repairs a popular hard benchmark that contained errors. https://arxiv.org/abs/2602.13964
+
+LiveOIBench (Oct 2025): Compares models with human contestants on programming olympiads. https://arxiv.org/abs/2510.09595
+
+ScienceArena (Aug 2026): An olympiad-style benchmark from thirteen science competitions. https://arxiv.org/abs/2608.30517
+
+LLM Olympiad (Mar 2026): Argues for sealed exams, so that scores are harder to manufacture. https://arxiv.org/abs/2603.23292
+
+P1 (Nov 2025): Open models trained with reinforcement learning for physics competitions. https://arxiv.org/abs/2511.13612
+
+RIFT (Jan 2026): Tests whether models can follow instructions given out of order. https://arxiv.org/abs/2601.18924
+
+Trusting the score
+Detecting contamination (Oct 2025): Detects whether benchmark samples were used during reinforcement learning. https://arxiv.org/abs/2510.09259
+
+Luce's Axiom in Chatbot Arena (Oct 2026): Finds where the ranking's math fails for near-identical models. https://arxiv.org/abs/2610.19095
+
+Boosting Instruction Following (Oct 2025): Studies how adding more instructions changes a model's performance. https://arxiv.org/abs/2510.14842
+
+Character and behaviour
+Constitutional AI (Dec 2022): Trains a model from a written list of rules, using AI feedback. https://arxiv.org/abs/2212.08073
+
+Towards Understanding Sycophancy (Oct 2023): Shows that assistants tend to agree with people, and links this to human preferences. https://arxiv.org/abs/2310.13548
+
+How RLHF Amplifies Sycophancy (Feb 2026): Explains the effect with reward gaps and offers an agreement penalty. https://arxiv.org/abs/2602.01002
+
+Locating Sycophancy (Oct 2026): Measures this habit at each training stage, and finds some of it before post-training. https://arxiv.org/abs/2610.37788
+
+Development of Sycophancy (Oct 2026): Traces when the habit appears and what a released model inherits. https://arxiv.org/abs/2610.26655
+
+Effects of RLHF on diversity (Oct 2023): Finds that RLHF can improve generalisation but lower output diversity. https://arxiv.org/abs/2310.06452
+
+Open Character Training (Nov 2025): An open method for shaping an assistant's persona. https://arxiv.org/abs/2511.01689
+
+Stress-Testing Model Specs (Oct 2025): Pushes on behaviour rules to find where models differ. https://arxiv.org/abs/2510.07686
+
+Start your first project
+Code you can run
+TinyZero: A small copy of the reasoning training in DeepSeek-R1-Zero, on a simple number game. https://github.com/Jiayi-Pan/TinyZero
+
+simpleRL-reason: Simple reinforcement learning code for reasoning. https://github.com/hkust-nlp/simpleRL-reason
+
+Open-R1: A fully open attempt to rebuild DeepSeek-R1. https://github.com/huggingface/open-r1
+
+verl: A flexible and fast framework for reinforcement learning post-training. https://github.com/verl-project/verl
+
+OpenRLHF: An easy-to-use framework for large reinforcement learning runs. https://github.com/OpenRLHF/OpenRLHF
+
+SkyRL: A modular reinforcement learning library for language models. https://github.com/NovaSky-AI/SkyRL
+
+verifiers: A library for building reinforcement learning environments and tests. https://github.com/PrimeIntellect-ai/verifiers
+
+TRL: Hugging Face's library for fine-tuning, DPO and reinforcement learning. https://github.com/huggingface/trl
+
+PEFT: The standard library for LoRA and similar small add-ons. https://github.com/huggingface/peft
+
+Unsloth: Fine-tunes models on your own computer with a local interface. https://github.com/unslothai/unsloth
+
+Axolotl: Runs fine-tuning from a config file. https://github.com/axolotl-ai-cloud/axolotl
+
+open-instruct: Ai2's post-training code, used for Tulu. https://github.com/allenai/open-instruct
+
+Stanford Alpaca: An early and simple example of instruction fine-tuning. https://github.com/tatsu-lab/stanford_alpaca
+
+nanochat: A full small chat model, which shows post-training in readable code. https://github.com/karpathy/nanochat
+
+FastChat: Trains, serves and tests chat models, and includes the code behind MT-Bench. https://github.com/lm-sys/FastChat
+
+Open Character Training: The code for shaping an assistant's persona. https://github.com/maiush/OpenCharacterTraining
+
+PrefCleanBench: Compares ways to clean preference data. https://github.com/deeplearning-wisc/PrefCleanBench
+
+DECS: The code for reducing overthinking with decoupled rewards. https://github.com/pixas/DECS
+
+EvilGenie: The reward hacking benchmark for coding agents. https://github.com/JonathanGabor/evilgenie_inspect
+
+Some questions for inspiration
+What does GRPO's standard deviation step change?: Train a small model on a number game with and without this step, then compare which problems it improves on. https://arxiv.org/abs/2607.00152
+
+Does a length penalty hurt accuracy on a small model?: Add a small penalty for each extra word, then plot length and accuracy for several penalty sizes. https://arxiv.org/abs/2603.00296
+
+Which problems teach a small model the most?: Train on easy, medium and hard problems separately, then test each model on all three. https://arxiv.org/abs/2610.39056
+
+Can you measure forgetting?: Fine-tune a small model on one task, then measure how much worse it got at what it could already do. https://arxiv.org/abs/2601.18699
+
+How much do wrong labels hurt DPO?: Flip a share of the labels in a preference dataset, train a small model, and plot quality against the share flipped. https://arxiv.org/abs/2509.23564
