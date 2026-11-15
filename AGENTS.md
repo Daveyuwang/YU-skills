@@ -1,5 +1,9 @@
 # Repository Guidance
 
+If YU shares this repository on its own or asks to install or use YU Skills,
+follow [Setup for coding agents](README.md#setup-for-coding-agents) in the
+current agent's user profile.
+
 When turning YU's notes or other source material into skills, consolidate
 repeated guidance and omit details that do not improve the agent's work.
 Preserve meaningful distinctions, explicit preferences, and relevant source

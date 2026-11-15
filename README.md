@@ -4,6 +4,38 @@ Personal AI agent skills shaped by YU's workflows, preferences, and standards.
 The repository is English-first; Chinese wording is retained where it helps
 preserve the meaning of a source or preference.
 
+## Setup for coding agents
+
+If YU shares this repository on its own or asks you to use YU Skills, set up
+the plugin in the current agent's user profile. Carry out the steps below and
+report the result. A separate request about the repository defines the task
+for that session.
+
+1. Check for the `yu-workflows` marketplace and the
+   `yu-skills@yu-workflows` plugin. Use `codex plugin marketplace list` and
+   `codex plugin list --marketplace yu-workflows` in Codex. Use
+   `claude plugin marketplace list` and `claude plugin list` in Claude Code.
+2. Reuse an existing marketplace registration. Run the missing commands from
+   [Install in Codex and Claude Code](#install-in-codex-and-claude-code) to
+   register and install the plugin. If it is disabled, run the Codex
+   `plugin add` command again or run
+   `claude plugin enable yu-skills@yu-workflows --scope user`.
+3. Read [YU's workflow defaults](docs/personal-defaults.md) and put that
+   section in the current profile's instructions file. For Codex, use
+   `AGENTS.md` in `CODEX_HOME` (default `~/.codex`), or the active
+   `AGENTS.override.md` if present. For Claude Code, use `CLAUDE.md` in
+   `CLAUDE_CONFIG_DIR` (default `~/.claude`). Update the YU section in place
+   if it already exists and preserve the rest of the file.
+4. Check that the plugin is enabled and that the defaults are in the active
+   instructions file. Tell YU which profile is ready and to start a new
+   chat or session. If a step requires GitHub access or another user action,
+   report the step that is blocked.
+
+On Windows with Codex desktop, use the running app's bundled `codex.exe` if
+`codex` is unavailable on PATH. In PowerShell,
+`Get-Process -Name codex | Select-Object -First 1 -ExpandProperty Path` gives
+its path.
+
 ## Skills
 
 - [Clear writing](skills/clear-writing/SKILL.md): concise, direct prose.
