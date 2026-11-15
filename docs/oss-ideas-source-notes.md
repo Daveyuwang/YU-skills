@@ -16,6 +16,18 @@ criteria, validation gates, and research path that apply to projects.
 - Strategy YU chose: "在增长品类里拼质量".
 - On idea sources: "不用通过我的会话进行分析".
 
+## Preferences are defaults; clarify and offer choices
+
+YU's words, 2026-11-15:
+
+> 能否让agent进行clarify/[needs user input] when the intent is not clear -
+> know what the users want in idea discovery/formation, right?
+> though in this skill it defined many preferences, they can be changed. and
+> a smart agent can adjust on their own and ask to provide more options,
+> right? for example, you find it too narrow as an idea, then clarify. for
+> example, if the agent thinks there are better options, then offer for
+> choices/decisions, right?
+
 ## Attitude toward similar projects
 
 Recorded on 2026-11-04 after ideas were narrowed or downgraded because small

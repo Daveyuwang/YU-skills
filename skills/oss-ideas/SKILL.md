@@ -18,20 +18,47 @@ than a paper. A more complete, better measured, or better integrated version
 of an existing idea in a growing category can be enough; "在增长品类里拼质量"
 is a valid strategy.
 
-## Settle the goal before generating ideas
+## Clarify what YU wants
 
-Ask the deciding questions together and early, as short choices: what the
-project is for (community impact, technical depth, daily personal use, a
-resume showcase), what form it takes (a framework or a polished product, not a
-toy or demo), which directions are in or out, and the time and hardware
-available. Criteria that surface one rejection at a time cost many rounds.
-Reuse answers already given in the conversation or memory. Do not mine YU's
-past sessions for ideas unless asked.
+The preferences in this skill and in memory record past decisions. Treat them
+as defaults: YU's goals change, and the current request takes precedence.
+Before generating ideas, find out what this request is for. Ask the deciding
+questions together and early, each as a short choice with a recommended
+option: what the project is for (community impact, technical depth, daily
+personal use, a resume showcase), what form it takes (a framework or a
+polished product, not a toy or demo), which directions are in or out, and the
+time and hardware available. Criteria that surface one rejection at a time
+cost many rounds.
 
-Screen out directions where a large platform will likely ship the feature
-itself, audiences too narrow to sustain a community, and directions YU has
-paused or rejected. If YU rejects a direction, do not return with variants
-of it.
+Ask only what changes the answer. Reuse answers already given in the
+conversation or memory, and confirm a remembered preference only if the
+request suggests it has changed. If a question has a sensible default, state
+the assumption and continue. Do not mine YU's past sessions for ideas unless
+asked.
+
+By default, screen out directions where a large platform will likely ship the
+feature itself, audiences too narrow to sustain a community, and directions YU
+has paused or rejected, unless YU reopens them. If YU rejects a direction, do
+not return with variants of it.
+
+## Bring decisions back to YU
+
+Keep checking the intent as the work produces evidence, and ask YU at points
+where the choice is theirs:
+
+- An idea looks too narrow, or the request seems to rule out something
+  better. Say so, show the wider version, and ask which scope YU wants.
+- A better option appears than the one being pursued, such as a stronger
+  direction found during research or a simpler route to the same goal. Offer
+  it next to the current plan; do not switch to it silently or leave it out.
+- YU has rejected several ideas in a row. Ask what the ideas are missing
+  before generating more.
+- A spike or comparison gives a weak or mixed result.
+
+Present each decision as 2 to 4 concrete options, with what each gains and
+costs, and recommend one with the reason. Use the host's question or choice
+tool if it has one. Use independent judgment: disagree with a stated
+preference when the evidence supports it, and leave the decision to YU.
 
 ## Offer a few developed ideas
 
@@ -72,8 +99,8 @@ belongs in the roadmap, not the headline.
 This stage is validation, not completeness: "fast validate and iterate,
 不要拖沓". Run a narrow spike of one or two days with real components and real
 runs, and state the stop condition before starting. If the idea proves too
-narrow or its value cannot be shown, stop and report so YU can decide, rather
-than pushing on.
+narrow or its value cannot be shown, stop and report instead of pushing on,
+with options such as widening, repositioning, continuing, or stopping.
 
 ## Later stages
 
@@ -83,5 +110,5 @@ than pushing on.
 - For turning a working project into a technical report or conference paper,
   read [project to research](references/project-to-research.md).
 
-At decision points (choosing among ideas, committing, each milestone), apply
-the [adaptive-reflection](../adaptive-reflection/SKILL.md) checks.
+At decision points (choosing among ideas, committing, each milestone), also
+apply the [adaptive-reflection](../adaptive-reflection/SKILL.md) checks.
