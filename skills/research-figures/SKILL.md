@@ -1,8 +1,9 @@
 ---
 name: research-figures
 description: >-
-  Create, revise, or review research figures, scientific plots, method
-  diagrams, and illustrations. Use for 科研配图、论文绘图、方法图、流程图 and 统计图.
+  Create, revise, or review a paper figure, a scientific results plot, a
+  multi-panel figure, or a method and pipeline diagram. Use for 科研配图、
+  论文绘图、方法图、流程图 and 统计图.
 ---
 
 # Research Figures

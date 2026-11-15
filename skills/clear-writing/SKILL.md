@@ -1,8 +1,9 @@
 ---
 name: clear-writing
 description: >-
-  Draft, edit, or review prose for clarity and YU's language preferences,
-  including no em dashes. Use for 写作、表达、文本润色 and 改写.
+  Write or revise emails, messages, documentation, reports, and other prose
+  in YU's direct style with no em dashes. Use for "draft a reply",
+  "make this clearer", "tighten this up", 写邮件、润色、改写 and 精简文字.
 ---
 
 # Clear Writing

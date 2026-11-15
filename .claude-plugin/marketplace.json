@@ -1,0 +1,13 @@
+{
+  "name": "yu-workflows",
+  "description": "YU's personal writing, coding, and research workflows.",
+  "owner": {
+    "name": "YU"
+  },
+  "plugins": [
+    {
+      "name": "yu-skills",
+      "source": "."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "yu-workflows",
+  "interface": {
+    "displayName": "YU Workflows"
+  },
+  "plugins": [
+    {
+      "name": "yu-skills",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

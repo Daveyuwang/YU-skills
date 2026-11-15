@@ -1,9 +1,10 @@
 ---
 name: research-integrity
 description: >-
-  Audit a paper's consistency and evidence when an integrity check or concrete
-  concern warrants it. Use for 论文诚信核查、数据一致性 and 证据审计; not for
-  routine writing edits.
+  Audit a paper's evidence or internal consistency. Use to check whether
+  results support a claim, whether numbers agree across tables and text,
+  or whether code and results match the manuscript. Use for 论文诚信核查、
+  数据一致性 and 证据审计.
 ---
 
 # Research Integrity Review

@@ -23,42 +23,69 @@ preserve the meaning of a source or preference.
 [Source notes](docs/) record YU's guidance and external sources, including
 original Chinese wording where it matters.
 
-## Use a skill in another project
+## Install in Codex and Claude Code
 
-Each folder under `skills/` is a complete skill. Copy the whole folder,
-including its references and any license notice, to a location your agent
-discovers. Keep this repository as the source for updates; copied skills do
-not update automatically.
+Install `yu-skills@yu-workflows` once per agent and user profile. Both plugins
+use the same `skills/` directory. Run the pair of commands for your agent
+from any directory. Use a GitHub account with access to this repository.
 
-For a Codex project, copy a skill into the project's `.agents/skills/` folder.
-For example, run this from this repository in bash or WSL after replacing the
-project path:
+**Codex**
 
-```bash
-project_dir="/path/to/project"
-mkdir -p "$project_dir/.agents/skills"
-cp -R skills/research-writing "$project_dir/.agents/skills/"
+```sh
+codex plugin marketplace add Daveyuwang/YU-skills
+codex plugin add yu-skills@yu-workflows
 ```
 
-Replace `research-writing` with any skill folder above. If the target already
-exists, compare it before copying or merging. For personal use in multiple
-projects, Codex also discovers skills under `~/.agents/skills/`. Copies with
-the same name in different locations may both appear. Other agents may use
-different locations; follow their setup instructions.
+**Claude Code**
 
-Ask for a matching task or invoke the skill by name, for example
-`$research-writing`. Codex can select matching skills automatically; if a new
-skill does not appear, restart Codex. See the
-[official skill locations](https://developers.openai.com/codex/build-skills).
-
-To make a skill a project default, add an instruction to the project's existing
-`AGENTS.md`, such as:
-
-```text
-For research writing, read and apply .agents/skills/research-writing/SKILL.md.
+```sh
+claude plugin marketplace add Daveyuwang/YU-skills
+claude plugin install yu-skills@yu-workflows --scope user
 ```
 
-Adjust the path for the installed skill and preserve existing instructions.
+To use a local checkout for development, run the commands at its root and
+replace `Daveyuwang/YU-skills` with `"$PWD"`.
+
+In Codex desktop, restart the app after registering the marketplace to refresh
+the Plugins page. Look for **YU Skills** under **YU Workflows**. In Claude Code,
+start a new session or run `/reload-plugins` in an existing session. Windows
+and WSL use separate user profiles. Run the relevant commands in each
+environment where you use the agent.
+
+## Use the workflows
+
+For personal defaults in every project, append
+[YU's workflow defaults](docs/personal-defaults.md) to `~/.codex/AGENTS.md`
+for Codex or `~/.claude/CLAUDE.md` for Claude Code. Preserve any instructions
+already in those files. Start a new session after editing. The defaults tell
+the agent which skills to use when you describe the work in your own words.
+
+Try “Tighten this email to my advisor”, “Fix this parser and check the edge
+case”, or “帮我重写论文摘要”. You can also select a skill directly with
+`$yu-skills:clear-writing` in Codex or `/yu-skills:clear-writing` in Claude
+Code. Check the installed bundle with
+`codex plugin list --marketplace yu-workflows` or
+`claude plugin details yu-skills`.
+
+## Update the plugin
+
+For a GitHub install, refresh the marketplace and then update the plugin.
+
+| Agent | Refresh the marketplace | Update the plugin |
+| --- | --- | --- |
+| Codex | `codex plugin marketplace upgrade yu-workflows` | `codex plugin add yu-skills@yu-workflows` |
+| Claude Code | `claude plugin marketplace update yu-workflows` | `claude plugin update yu-skills@yu-workflows --scope user` |
+
+Start a fresh session after updating. For a local checkout, run just the
+plugin update command. When releasing skill changes, bump the version in both
+`.codex-plugin/plugin.json` and `.claude-plugin/plugin.json` before pushing.
+
+For an agent that loads standalone skills, copy the complete skill folder
+with its references and license notices to that agent's skill directory.
+Codex discovers standalone user skills in `~/.agents/skills/`, and Claude
+Code uses `~/.claude/skills/`. Use one installation method per skill to
+avoid duplicate entries. See the [Codex plugin guide](https://developers.openai.com/plugins/build/plugins)
+and the [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces).
 
 ## Research project template
 

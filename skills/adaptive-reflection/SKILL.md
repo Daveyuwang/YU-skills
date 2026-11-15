@@ -1,11 +1,10 @@
 ---
 name: adaptive-reflection
 description: >-
-  Reassess assumptions, evidence, and next steps in complex, evolving work,
-  such as research or system design, and run an expert-standard check when an
-  important task starts, a plan is formed or revised, or the next step is
-  planned. Use for 反思检查、专家标准检查、科研规划 and 复杂任务; skip
-  routine edits.
+  Plan or reassess complex research and engineering work. Use when choosing a
+  design, revising a multi-stage plan, diagnosing why work keeps getting
+  stuck, or asking what an expert would check. Also applies to 方案设计、
+  重新审视方案、专家标准检查 and 复杂任务规划.
 ---
 
 # Adaptive Reflection

@@ -1,10 +1,10 @@
 ---
 name: research-writing
 description: >-
-  Draft, revise, or review research-paper sections, titles, tables, captions,
-  and claim support, including abstracts, introductions, Methods, experiments,
-  related work, and conclusions. Use for 论文写作、修改润色、实验组织、
-  论文表格 and 行文流畅性.
+  Draft, revise, or review manuscript prose, tables, and captions. Use for
+  paper framing, titles, abstracts, introductions, related work, methods,
+  experimental results, and conclusions, including 论文写作、摘要、引言、
+  论文润色、实验组织 and 论文表格.
 ---
 
 # Research Writing

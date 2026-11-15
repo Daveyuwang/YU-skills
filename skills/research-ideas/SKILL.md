@@ -1,9 +1,9 @@
 ---
 name: research-ideas
 description: >-
-  Develop research ideas, assess novelty against prior work, or plan
-  implementation and experiments for a chosen direction. Use for 科研构思、
-  研究方向、文献撞车 and 实验规划.
+  Find a research question or motivation, assess whether an idea is novel
+  against prior work, or plan how to implement and test a chosen direction.
+  Use for "has anyone done this?", 找研究动机、科研选题、文献撞车 and 实验规划.
 ---
 
 # Research Ideas

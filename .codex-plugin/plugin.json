@@ -1,0 +1,16 @@
+{
+  "name": "yu-skills",
+  "version": "1.0.0",
+  "description": "YU's workflows for writing, coding, task planning, and research.",
+  "author": {
+    "name": "YU"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "YU Skills",
+    "shortDescription": "Personal writing, coding, and research workflows",
+    "longDescription": "Apply YU's preferences for clear prose, pragmatic code, and complex task planning. Use focused workflows for research writing, figures, ideas, and evidence audits.",
+    "developerName": "YU",
+    "category": "Productivity"
+  }
+}

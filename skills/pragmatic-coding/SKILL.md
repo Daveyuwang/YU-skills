@@ -1,9 +1,9 @@
 ---
 name: pragmatic-coding
 description: >-
-  Implement, debug, and review software with minimal structure and
-  proportionate checks. Use for coding, repository organization, READMEs,
-  testing, 代码审查、项目结构 and 避免过度防御.
+  Use YU's coding conventions to implement a feature, fix a bug, refactor,
+  review code, choose tests, or organize a repo or README. Prefer simple
+  changes and targeted verification. Use for 修 bug、重构、代码审查 and 项目结构.
 ---
 
 # Pragmatic Coding
