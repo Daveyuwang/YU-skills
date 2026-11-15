@@ -23,3 +23,6 @@ the skill and read its relevant references as needed.
   assess novelty, or plan implementation and experiments for a chosen idea.
 - Use `yu-skills:research-integrity` for a requested audit of manuscript
   consistency, claims, or experimental evidence.
+- Use `yu-skills:oss-ideas` to find, compare, validate, or commit to an
+  open-source project idea, or to plan a technical report or paper from a
+  working project.

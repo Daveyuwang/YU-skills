@@ -1,7 +1,7 @@
 # YU Skills
 
-Seven skills for Codex and Claude Code based on YU's writing, coding, and
-research workflows.
+Eight skills for Codex and Claude Code based on YU's writing, coding, research,
+and open-source project workflows.
 
 ## Setup for coding agents
 
@@ -61,6 +61,7 @@ To invoke a skill directly, use `$yu-skills:clear-writing` in Codex or
 - [Adaptive reflection](skills/adaptive-reflection/SKILL.md) for complex research and engineering plans.
 - [Research ideas](skills/research-ideas/SKILL.md) for research questions, novelty, and experiment planning.
 - [Research integrity](skills/research-integrity/SKILL.md) for auditing claims and evidence.
+- [OSS ideas](skills/oss-ideas/SKILL.md) for choosing, validating, and committing to open-source projects, and turning them into research.
 
 ## Development and updates
 
