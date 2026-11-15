@@ -1,86 +1,53 @@
 # OSS Ideas: Source Notes
 
 Source: YU's guidance while choosing, validating, and building open-source
-projects, 2026-11-04 to 2026-11-15. The [oss-ideas skill](../skills/oss-ideas/SKILL.md)
-turns these decisions and corrections into a method. It reuses the constructive
-stance of [research-ideas](research-ideas-source-notes.md) and adds the
-criteria, validation gates, and research path that apply to projects.
+projects, 2026-11-04 to 2026-11-15. At YU's request, the assistant edited YU's
+original remarks into the statements below and kept their meaning. Each date
+is the date of the original remark. The [oss-ideas skill](../skills/oss-ideas/SKILL.md)
+turns this guidance into a method. It reuses the constructive stance of
+[research-ideas](research-ideas-source-notes.md) and adds the criteria,
+validation gates, and research path that apply to projects.
 
-## Goals and scope
+## 1. 目标与范围（2026-11-14）
 
-- Purpose of the project (YU's answers to a choice question): 社区影响,
-  技术深度, 自己天天用. The project should also stand on a resume after its first
-  formal release.
-- Form (YU's words): "要么做框架 要么做好用的产品".
-- Directions YU avoids (YU's answers): 服务小众人群, 拼不过大厂.
-- Strategy YU chose: "在增长品类里拼质量".
-- On idea sources: "不用通过我的会话进行分析".
+> 我们要做的开源项目，要么是框架，要么是好用的产品。它的意义体现在三点：对社区有影响，有技术深度，我自己每天都会用。正式发布第一版之后，它也要能写进简历。
+>
+> 不做只服务小众人群的方向，也不做拼不过大厂的方向。策略上不必开创新品类，在增长中的品类里比拼质量就够了。找想法时，不要通过分析我的会话记录来找。
 
-## Preferences are defaults; clarify and offer choices
+## 2. 偏好是默认值，意图不清楚就先问（2026-11-15）
 
-YU's words, 2026-11-15:
+> 这个 skill 里写了不少我的偏好，但它们是可以变的。意图不清楚时，agent 应该先澄清，弄明白我在发现和形成想法时真正想要什么，就像用选择题收集我的偏好那样。
+>
+> agent 也应该有自己的判断，主动调整，并提供更多选项。比如觉得某个想法太窄，就提出来请我确认；觉得有更好的方向，就把它作为选项交给我决定。
 
-> 能否让agent进行clarify/[needs user input] when the intent is not clear -
-> know what the users want in idea discovery/formation, right?
-> though in this skill it defined many preferences, they can be changed. and
-> a smart agent can adjust on their own and ask to provide more options,
-> right? for example, you find it too narrow as an idea, then clarify. for
-> example, if the agent thinks there are better options, then offer for
-> choices/decisions, right?
+## 3. 对待相似项目（2026-11-04）
 
-## Attitude toward similar projects
+> 不要把想法收得太窄。这是做项目，不是以发表为目标的研究。存在相似项目，不代表这个想法不能做。应该把想法发展到最完整的版本，并讲清它和现有项目的区别。
 
-Recorded on 2026-11-04 after ideas were narrowed or downgraded because small
-similar projects existed. YU's words: "不要过分收窄"; this is a project, not
-research aiming to publish. Similar projects do not disqualify an idea; develop
-its fullest version and state its difference.
+## 4. 快速验证（2026-11-14）
 
-## Validation
+> 现在是验证阶段，不追求完整：快速验证，快速迭代，不要拖沓。如果方向过窄，或者体现不出价值，就及时停下来汇报，再决定是否继续。
+>
+> agent 工具自带的策略是不是已经够用，也要回答清楚。如果够用，我们的项目为什么还需要存在，继续推进的理由是什么？
 
-YU's words, 2026-11-14:
+## 5. 产品质量
 
-> fast validate and iterate, 不要拖沓，这是验证阶段，而不是追求完整
+> 始终记住，我们要做的是产品，要真正可用，而不是玩具。（2026-11-08）
+>
+> 项目要作为工具层或插件，接入 Claude Code、Codex 和 DeepSeek Harness 这类工具。（2026-11-14）
+>
+> 资源占用要和宿主相称。一个辅助工具的内存占用比 Claude 和其他 agent 应用还高，就是本末倒置。（2026-11-14）
+>
+> 代码要精简：没有冗余和重复，不留无用或过时的文件与代码，用最清楚的实现，保持高质量标准。（2026-11-14）
 
-> 如果过窄或无法体现价值则及时停下并report再决定是否继续
+## 6. 立项（2026-11-14）
 
-On whether existing tools already suffice (YU's words):
+> 我想正式立项并持续投入，不断改进，在正式发布第一版后写进简历。立项之前要先判断：值得吗？
 
-> existing policy from agent harness itself not enough? if enough, why we need
-> our project and the motivation to move foward?
+随后的回答确立了 skill 中的做法：可以立项，但先用竞品对比把关，事先定好每种结果对应的决定，并定义第一版要达到的标准。
 
-## Product quality
+## 7. 从项目到研究（2026-11-15）
 
-- 2026-11-08: "始终记住，我们要做的产品化，要可用，而不是toy".
-- On integration (YU's words): "我们要对接到claude code, codex, dsh, etc.
-  作为工具层/插件".
-- On resource use, after a helper process used more memory than the agents it
-  served (YU's words): "占这么多内存可不行" and "比claude/其他harness应用还要高，
-  本末倒，我感觉？".
-- On code (YU's words): "code should be minimal. avoid any redundancy,
-  useless/stale file/code, avoid repetitions."
-
-## Commitment
-
-YU's words, 2026-11-14:
-
-> 所以我们正式立项并持续投入这项目吗？值得吗？ eventually, 我想持续投入，改进
-> 并在正式第一版后写到我的简历里。
-
-The answer that followed set the pattern in the skill: commit, but gate the
-decision on a competitor comparison with outcomes decided in advance, and
-define a version 1 bar.
-
-## From project to research
-
-YU's words, 2026-11-15:
-
-> oss project can move to a research project/technical report, right? the
-> difference is the move - we first make a good product/oss framework then can
-> still adapt to a research scene to produce a more serious report which lately
-> can be turned into a conference paper.
-> the two deliverables are the same, even more, this way, we can have a way
-> better demo. but the risk is that we need to change to ensure the
-> insights/novelty so that we don't overlap too much - to do a novelty check
-> then make necessary changes if needed - which means that this report
-> deliverable has its value to become a conference paper, technical report,
-> etc.
+> 开源项目可以进一步发展成研究项目或技术报告。顺序是先做出好的产品或开源框架，再把它改造到研究场景，写出更严谨的报告，之后还可以发展成会议论文。
+>
+> 这样两份交付物出自同一个项目，而且有了真正可用的系统，演示效果也会好得多。风险在于研究需要洞见和新颖性，不能和已有工作重合太多。所以转向之前要做一次查新，必要时对项目或研究做相应调整。这样产出的报告才有价值，可以成为技术报告或会议论文。
