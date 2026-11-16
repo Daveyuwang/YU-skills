@@ -24,3 +24,8 @@ skill now offers structured diagram conventions as a conditional mode and
 records asset sources and license checks. A consistent visual grammar is not a
 claim of compliance with a formal diagramming standard. The Canva connector's
 available operations depend on the environment and account.
+
+YU prefers Flaticon first, SVG Repo second, and The Noun Project as an
+optional fallback for icons. YU supplied the [Flaticon AI robot example](https://www.flaticon.com/free-icon/ai_2814666)
+to show when a free PNG can be useful. The skill checks the format and terms
+on each selected asset.

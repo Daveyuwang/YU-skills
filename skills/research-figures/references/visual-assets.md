@@ -5,7 +5,71 @@ figure's visual style. Search for specific concepts and compare candidates;
 use an appropriate vector asset where practical. Preserve source accuracy and
 keep assets independently movable in editable deliverables when possible.
 
-## Starting points
+## Search for icons
+
+Search by concept and style, for example `AI robot`, `retrieval database`,
+or `outline document`. Compare candidates at the final display size and
+match stroke weight, fill, and color to the rest of the figure. Look for
+related icons from the same pack when the figure needs several.
+
+1. Start with [Flaticon](https://www.flaticon.com/). Use the site's search or
+   a site-filtered web search. Its free tier offers PNG for eligible icons.
+   Check which formats are available on the user's plan. [Flaticon plans](https://www.flaticon.com/pricing)
+2. Search [SVG Repo](https://www.svgrepo.com/) next if Flaticon lacks a good
+   match, the required SVG, or suitable terms. Read the license shown on the
+   individual icon page. [SVG Repo licensing](https://www.svgrepo.com/page/licensing)
+3. Use [The Noun Project](https://thenounproject.com/) as an optional fallback.
+   Check the icon's license and download options. CC BY icons on the free
+   tier require credit. [Noun Project icon licenses](https://help.thenounproject.com/hc/en-us/articles/200509798-What-licenses-do-you-offer-for-icons)
+
+## Confirm the file and usage terms
+
+- Open the exact asset page and verify the creator, available file formats,
+  and whether the desired download is free or requires a paid plan. If
+  the page or terms are unavailable, report the gap or choose a verifiable
+  alternative.
+- Prefer SVG when the figure needs scalable or editable paths. A transparent
+  PNG is suitable when its resolution is sufficient at the final size. Keep
+  it as a separate raster component in the editable figure. If the brief
+  requires vector paths, continue searching when only PNG is available.
+- Check whether the license permits the intended publication, edits, and
+  any sharing of editable source files containing the asset. Record the
+  asset URL, creator, license, access date, and required credit with the
+  figure source. Put required credit in the published output where the
+  license and venue allow. Check permission before extracting assets from
+  other papers.
+
+## Present candidates
+
+For an important figure element with several viable options, show two or
+three verified candidates. Include a preview when available, the asset page,
+the available format and cost, and any required credit. Explain how each
+option fits the figure and recommend one. Ask the user to choose when the
+options meaningfully change the figure's style, interpretation, or delivery.
+Use a clear match in the draft when the choice is easy to reverse.
+
+## Example: AI agent in a pipeline
+
+Search `AI robot` on Flaticon to find an icon for the actor labeled
+`AI agent`. Search `robot` on SVG Repo for a free vector alternative.
+Open the exact pages and compare the downloads they offer.
+
+<img src="https://cdn-icons-png.flaticon.com/512/2814/2814666.png" alt="Blue robot icon labeled AI" width="120">
+
+AI icon designed by Magnific from Flaticon. [Original asset](https://www.flaticon.com/free-icon/ai_2814666)
+
+| Candidate | When to use it | Format and credit |
+| --- | --- | --- |
+| [Flaticon AI](https://www.flaticon.com/free-icon/ai_2814666) | A color figure where the blue robot matches the palette | Free PNG up to 512 px with attribution. SVG is listed under Premium. [Flaticon plans](https://www.flaticon.com/pricing) |
+| [SVG Repo Robot](https://www.svgrepo.com/svg/99464/robot) | A diagram that needs a scalable, recolorable robot symbol | Free SVG, listed as CC0 on the asset page. |
+
+Use the blue PNG in a color draft when it reads clearly at print size.
+Place it as a separate image next to the editable `AI agent` label and
+include the required credit. Use the SVG if the illustrator needs editable
+vector paths. Show the two previews beside the same label if the user needs
+to choose the visual style.
+
+## Other sources
 
 - [Bioicons](https://bioicons.com/): life-science illustrations, with licenses
   that vary by asset. Check the selected icon's author and license.
@@ -22,13 +86,6 @@ keep assets independently movable in editable deliverables when possible.
 - [BioRender](https://www.biorender.com/): science-specific illustrations and
   templates. Check the account plan and publication license before submission;
   access to an asset does not by itself grant publication rights.
-
-These are starting points, not a closed catalog. Check each asset's source,
-license, attribution, modification and redistribution terms, and compatibility
-with the intended paper and venue. Record the asset URL, creator, license,
-access date, and any required credit with the figure's source files. A
-royalty-free label alone does not establish unrestricted reuse. Do not extract
-assets from other papers unless the rights permit that use.
 
 ## Working with Canva
 

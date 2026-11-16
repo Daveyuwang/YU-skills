@@ -2,8 +2,8 @@
 name: research-figures
 description: >-
   Create, revise, or review a paper figure, a scientific results plot, a
-  multi-panel figure, or a method and pipeline diagram. Use for 科研配图、
-  论文绘图、方法图、流程图 and 统计图.
+  multi-panel figure, or a method and pipeline diagram. Find icons and vector
+  assets for research figures. Use for 科研配图、论文绘图、方法图、流程图 and 统计图.
 ---
 
 # Research Figures
@@ -71,10 +71,10 @@ For a more systematic or conventional diagram, use
 [structured diagrams](references/structured-diagrams.md). Select a formal
 notation only when the task or audience calls for it.
 
-When useful graphics are available, use
-[visual assets](references/visual-assets.md) to find and verify them or to work
-in Canva. Use assets in service of the scientific content, with publication
-rights and attribution checked for the intended output.
+When an icon or illustration helps explain the figure, follow
+[visual assets](references/visual-assets.md) to find, verify, and compare
+candidates. The guide includes a worked AI agent example and covers Canva
+when requested.
 
 For data plots, use reproducible plotting code and choose a form appropriate
 to the variables. Do not connect discrete categories by default. Show units,
