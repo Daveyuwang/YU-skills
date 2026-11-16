@@ -71,10 +71,10 @@ For a more systematic or conventional diagram, use
 [structured diagrams](references/structured-diagrams.md). Select a formal
 notation only when the task or audience calls for it.
 
-When an icon or illustration helps explain the figure, follow
-[visual assets](references/visual-assets.md) to find, verify, and compare
-candidates. The guide includes a worked AI agent example and covers Canva
-when requested.
+For a new icon or illustration, start with a live keyword search. Follow
+[visual assets](references/visual-assets.md) to verify and compare candidates,
+using the worked example as a reference. The guide also covers Canva when
+requested.
 
 For data plots, use reproducible plotting code and choose a form appropriate
 to the variables. Do not connect discrete categories by default. Show units,

@@ -7,10 +7,13 @@ keep assets independently movable in editable deliverables when possible.
 
 ## Search for icons
 
-Search by concept and style, for example `AI robot`, `retrieval database`,
-or `outline document`. Compare candidates at the final display size and
-match stroke weight, fill, and color to the rest of the figure. Look for
-related icons from the same pack when the figure needs several.
+Run a live keyword search for the requested element before opening any
+worked-example asset links. Use the catalog's search or a site-filtered web
+query with terms that name the concept and, if useful, the style or format.
+For example, search for `AI robot`, `retrieval database`, or
+`outline document`. Compare results at the final display size and match
+stroke weight, fill, and color to the figure. Look for related icons from
+the same pack when the figure needs several.
 
 1. Start with [Flaticon](https://www.flaticon.com/). Use the site's search or
    a site-filtered web search. Its free tier offers PNG for eligible icons.
@@ -41,18 +44,24 @@ related icons from the same pack when the figure needs several.
 
 ## Present candidates
 
-For an important figure element with several viable options, show two or
-three verified candidates. Include a preview when available, the asset page,
-the available format and cost, and any required credit. Explain how each
-option fits the figure and recommend one. Ask the user to choose when the
-options meaningfully change the figure's style, interpretation, or delivery.
-Use a clear match in the draft when the choice is easy to reverse.
+For an icon search or an important figure element, show two or three
+verified candidates. Include at least one result from the current keyword
+search whose asset page is absent from the worked examples. Try a synonym
+or the next catalog if the first query yields no suitable new result.
+
+For each candidate, link the asset page and give the verified format,
+whether that format is free or paid, and any required credit. Show a
+preview when available. If fewer than two options can be verified, give
+the ones you checked and report the gap. Explain the fit and recommend one.
+Ask the user to choose when the options meaningfully change the figure's
+style, interpretation, or delivery. Use a clear match in the draft when
+the choice is easy to reverse.
 
 ## Example: AI agent in a pipeline
 
-Search `AI robot` on Flaticon to find an icon for the actor labeled
-`AI agent`. Search `robot` on SVG Repo for a free vector alternative.
-Open the exact pages and compare the downloads they offer.
+For an actor labeled `AI agent`, a search could start with `AI robot` on
+Flaticon and `robot` on SVG Repo. The examples below show how to compare
+formats and terms. Use the results of a new search for each shortlist.
 
 <img src="https://cdn-icons-png.flaticon.com/512/2814/2814666.png" alt="Blue robot icon labeled AI" width="120">
 
