@@ -26,3 +26,7 @@ the skill and read its relevant references as needed.
 - Use `yu-skills:oss-ideas` to find, compare, validate, or commit to an
   open-source project idea, or to plan a technical report or paper from a
   working project.
+- Use `yu-skills:cross-check` when YU asks for an adversarial check,
+  cross-review, or handoff to the other agent (Codex or Claude Code), and
+  whenever a skill such as ARIS sends work to a reviewer from another model.
+  Its model defaults apply to those calls.
