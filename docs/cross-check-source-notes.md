@@ -27,3 +27,10 @@ Decisions made while building it:
   YU's `max`. ARIS deep audits that ask for `ultra` keep it.
 - In Codex, ARIS's default reviewer is a native Codex subagent, which is the
   same model family. The skill routes those reviews to Claude instead.
+- The Claude peer gets only Read, Grep, and Glob with no MCP servers. The
+  Codex peer runs its commands in the read-only sandbox but keeps the MCP
+  servers its configuration enables: a config override can disable servers
+  defined in `config.toml` but not those that plugins provide. In a test
+  (2026-11-17), a read-only Codex peer could call `node_repl` but declined a
+  requested file write, citing the read-only policy. Whether `node_repl`
+  itself enforces the sandbox was not tested.

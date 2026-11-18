@@ -34,9 +34,10 @@ when you run in Codex. Defaults are the strongest models YU uses:
 - When YU names a model or effort, map it to the exact id, use it for this
   check, and confirm in one line with the served model the script prints. If
   the script exits 2, the served model is unknown or differs from the request,
-  or Codex ran at a different effort: tell YU before using the reply. Claude
-  Code does not report its effort, so the Claude direction confirms the model
-  only.
+  or Codex ran at a different effort: tell YU before using the reply. Both
+  records come from the CLI, so they show the model it ran with, not a
+  backend attestation. Claude Code does not report its effort, so the Claude
+  direction confirms the model only.
 - When YU changes the default ("use X from now on"), run
   `python <this skill>/scripts/cross_check.py defaults --to <peer> --model <id> --effort <level>`
   and show the output. It validates the choice and writes
@@ -88,9 +89,11 @@ review, audit, or argue against the work.
    From Codex, use `--to claude` and run it outside the Codex sandbox, since
    it needs network access and the peer's home directory. The script adds the
    reviewer rules, keeps the peer read-only, and records the served model.
-   The Codex peer can run commands in a read-only sandbox. The Claude peer can
+   The Codex peer runs commands in a read-only sandbox, keeps the MCP tools its
+   configuration enables, and is told not to write. The Claude peer can
    only read files, so save diffs and test or script output it needs into the
-   run directory, and pass `--add-dir` for directories outside `--cwd`.
+   run directory, which it can always read, and pass `--add-dir` for other
+   directories outside `--cwd`.
 5. **Verify the reply.** Check every finding against the primary material.
    Sort findings into confirmed, rejected (with your evidence), and needs YU.
    The peer can be wrong with confidence, and agreement is not proof.

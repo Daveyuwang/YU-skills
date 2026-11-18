@@ -16,6 +16,7 @@ or Codex reports a different or no effort; 1 no usable reply.
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -107,10 +108,11 @@ def find_codex():
     fail("codex CLI not found; set CODEX_BIN")
 
 
-def call(cmd, prompt, cwd):
+def call(cmd, prompt, cwd, log_path):
     env = dict(os.environ, **{PEER_ENV: "1"})
     p = subprocess.run(cmd, input=prompt, capture_output=True, text=True, encoding="utf-8",
                        errors="replace", cwd=cwd, env=env)
+    log_path.write_text(p.stdout + "\n--- stderr ---\n" + p.stderr, encoding="utf-8", newline="\n")
     return p.returncode, p.stdout, p.stderr
 
 
@@ -129,7 +131,7 @@ def codex_turn_contexts(thread_id):
     return out
 
 
-def run_codex(prompt, session, model, effort, cwd, reply_path):
+def run_codex(prompt, session, model, effort, cwd, reply_path, log_path):
     common = ["--json", "-m", model, "-c", f'model_reasoning_effort="{effort}"',
               "--skip-git-repo-check", "-o", str(reply_path)]
     if session:
@@ -137,9 +139,9 @@ def run_codex(prompt, session, model, effort, cwd, reply_path):
     else:
         cmd = [find_codex(), "exec", *common, "-s", "read-only", "-C", cwd, "-"]
     turns_before = len(codex_turn_contexts(session)) if session else 0
-    rc, stdout, stderr = call(cmd, prompt, cwd)
+    rc, stdout, stderr = call(cmd, prompt, cwd, log_path)
 
-    thread_id, usage, errors = None, None, []
+    thread_id, usage, errors, warnings = None, None, [], []
     for line in stdout.splitlines():
         try:
             ev = json.loads(line)
@@ -149,8 +151,10 @@ def run_codex(prompt, session, model, effort, cwd, reply_path):
             thread_id = ev.get("thread_id")
         elif ev.get("type") == "turn.completed":
             usage = ev.get("usage")
-        elif ev.get("type") in ("error", "turn.failed"):
+        elif ev.get("type") == "turn.failed":
             errors.append(ev)
+        elif ev.get("type") == "error":  # can be a recovered stream error, such as a reconnect
+            warnings.append(ev)
     if not thread_id:
         errors.append("no thread id")
     elif session and thread_id != session:
@@ -159,18 +163,23 @@ def run_codex(prompt, session, model, effort, cwd, reply_path):
         errors.append(f"codex exited {rc}: {stderr.strip()[-1000:]}")
     if usage is None and not errors:
         errors.append("no turn.completed event")
-    reply = reply_path.read_text(encoding="utf-8").strip() if reply_path.exists() else ""
+    reply = reply_path.read_text(encoding="utf-8", errors="replace").strip() if reply_path.exists() else ""
     if not reply and not errors:
         errors.append("empty reply")
 
     turns = codex_turn_contexts(thread_id) if thread_id else []
     served = turns[-1] if len(turns) > turns_before else (None, None)
     return {"ok": not errors, "session_id": thread_id, "served_model": served[0],
-            "served_effort": served[1], "served_source": "Codex session file, this turn",
-            "usage": usage, "errors": errors, "log": stdout + "\n--- stderr ---\n" + stderr}
+            "served_effort": served[1], "served_source": "Codex session file (client turn settings)",
+            "usage": usage, "errors": errors, "warnings": warnings}
 
 
-def run_claude(prompt, session, model, effort, cwd, add_dirs, reply_path):
+def is_dated(served, model):
+    """True when served is model plus a date snapshot suffix, such as claude-x-20261101."""
+    return re.fullmatch(re.escape(model) + r"-\d{8}", served) is not None
+
+
+def run_claude(prompt, session, model, effort, cwd, add_dirs, reply_path, log_path):
     exe = shutil.which("claude") or fail("claude CLI not found on PATH")
     # File reading only: no shell (git status and git diff can write) and no MCP servers.
     cmd = [exe, "-p", "--output-format", "json", "--model", model, "--effort", effort,
@@ -179,10 +188,12 @@ def run_claude(prompt, session, model, effort, cwd, add_dirs, reply_path):
         cmd += ["--add-dir", d]
     if session:
         cmd += ["--resume", session]
-    rc, stdout, stderr = call(cmd, prompt, cwd)
+    rc, stdout, stderr = call(cmd, prompt, cwd, log_path)
     try:
         out = json.loads(stdout)
     except json.JSONDecodeError:
+        out = {}
+    if not isinstance(out, dict):
         out = {}
 
     errors = []
@@ -198,12 +209,12 @@ def run_claude(prompt, session, model, effort, cwd, add_dirs, reply_path):
 
     # modelUsage is aggregate: it shows the requested model took part, not which model wrote the reply.
     used = out.get("modelUsage") or {}
-    prefixed = [m for m in used if m.startswith(model + "-")]
-    served = model if model in used else prefixed[0] if prefixed else next(iter(used)) if len(used) == 1 else None
+    dated = [m for m in used if is_dated(m, model)]
+    served = model if model in used else dated[0] if dated else next(iter(used)) if len(used) == 1 else None
     return {"ok": not errors, "session_id": out.get("session_id"), "served_model": served,
             "served_effort": None, "served_source": "modelUsage (aggregate); Claude Code does not report effort",
             "usage": {"by_model": used, "cost_usd": out.get("total_cost_usd")},
-            "errors": errors, "log": stdout + "\n--- stderr ---\n" + stderr}
+            "errors": errors}
 
 
 def reserve_round(run_dir, prompt):
@@ -211,7 +222,7 @@ def reserve_round(run_dir, prompt):
     n = 1
     while True:
         path = run_dir / f"round-{n:02d}.prompt.md"
-        if any(run_dir.glob(f"round-{n:02d}.*")):
+        if any((run_dir / f"round-{n:02d}.{ext}").exists() for ext in ("prompt.md", "reply.md", "meta.json", "log")):
             n += 1
             continue
         try:
@@ -251,6 +262,8 @@ def send(a, run_dir):
             asked = getattr(a, key)
             if asked and asked != session[key]:
                 fail(f"session uses {key} {session[key]!r}; start a new run dir to switch to {asked!r}")
+        if a.cwd and str(Path(a.cwd).resolve()) != session["cwd"]:
+            fail(f"session uses cwd {session['cwd']}; start a new run dir to change it")
         model, effort, cwd = session["model"], session["effort"], session["cwd"]
         add_dirs = list(dict.fromkeys(session.get("add_dirs", []) + [str(Path(d).resolve()) for d in a.add_dir]))
         if not a.prompt_file:
@@ -274,16 +287,19 @@ def send(a, run_dir):
     reply_path.unlink(missing_ok=True)
     sid = session["session_id"] if session else None
     started = time.time()
+    log_path = Path(f"{stem}.log")
     if a.to == "codex":
-        res = run_codex(prompt, sid, model, effort, cwd, reply_path)
+        res = run_codex(prompt, sid, model, effort, cwd, reply_path, log_path)
     else:
-        res = run_claude(prompt, sid, model, effort, cwd, add_dirs, reply_path)
+        # The Claude peer reads only under its cwd and --add-dir, so the run dir is always added.
+        readable = list(dict.fromkeys(add_dirs + [str(run_dir)]))
+        res = run_claude(prompt, sid, model, effort, cwd, readable, reply_path, log_path)
     if sid and res["session_id"] != sid:
         # Claude Code may give a resumed conversation a new id; the history carries over.
         res["resumed_from"] = sid
-    Path(f"{stem}.log").write_text(res.pop("log"), encoding="utf-8", newline="\n")
 
-    model_match = res["served_model"] == model if res["served_model"] else None
+    served = res["served_model"]
+    model_match = (served == model or (a.to == "claude" and is_dated(served, model))) if served else None
     effort_match = res["served_effort"] == effort if res["served_effort"] else None
     meta = {"round": rnd, "peer": a.to, "requested_model": model, "requested_effort": effort, **res,
             "model_match": model_match, "effort_match": effort_match, "cwd": cwd, "add_dirs": add_dirs,
@@ -320,8 +336,16 @@ def cmd_defaults(a):
     print(json.dumps({"file": str(USER_FILE), "defaults": load_defaults()}, indent=2))
 
 
+class Parser(argparse.ArgumentParser):
+    """Usage errors exit 1, so exit 2 keeps its documented meaning."""
+
+    def error(self, message):
+        self.print_usage(sys.stderr)
+        fail(message)
+
+
 def main():
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p = Parser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("send")
     s.add_argument("--to", choices=["codex", "claude"], required=True)
