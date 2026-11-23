@@ -1,7 +1,7 @@
 # YU Skills
 
-Nine skills for Codex and Claude Code based on YU's writing, coding, research,
-and open-source project workflows.
+Skills for Codex and Claude Code covering YU's writing, coding, research,
+open-source project workflows, and design interviews.
 
 ## Setup for coding agents
 
@@ -63,6 +63,8 @@ To invoke a skill directly, use `$yu-skills:clear-writing` in Codex or
 - [Research integrity](skills/research-integrity/SKILL.md) for auditing claims and evidence.
 - [OSS ideas](skills/oss-ideas/SKILL.md) for choosing, validating, and committing to open-source projects, and turning them into research.
 - [Cross-check](skills/cross-check/SKILL.md) for adversarial checks by the other agent (Claude Code to Codex and back), including ARIS reviews. It needs both `codex` and `claude` CLIs signed in on the same profile, and Python 3.
+- [Grill me](skills/grill-me/SKILL.md) for a design interview in chat or with project documentation.
+- [Handoff](skills/handoff/SKILL.md) for a portable Markdown brief that another session or teammate can pick up.
 
 ## Development and updates
 

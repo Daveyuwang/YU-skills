@@ -12,6 +12,10 @@ the skill and read its relevant references as needed.
   behavior that matters.
 - Use `yu-skills:adaptive-reflection` when framing or revising a complex
   research or engineering plan, or when repeated attempts are stuck.
+- Use `yu-skills:grill-me` when YU asks for a design interview, including
+  requests to ground it in the codebase and record decisions in project docs.
+- Use `yu-skills:handoff` when YU asks for a portable brief so another session,
+  agent, or teammate can continue the work.
 - Use `yu-skills:research-writing` for manuscript framing, sections, tables,
   captions, and substantive revisions. For paper writing, editing, polishing,
   shortening, organizing experiments, or responding to reviewers in either
@@ -26,7 +30,6 @@ the skill and read its relevant references as needed.
 - Use `yu-skills:oss-ideas` to find, compare, validate, or commit to an
   open-source project idea, or to plan a technical report or paper from a
   working project.
-- Use `yu-skills:cross-check` when YU asks for an adversarial check,
-  cross-review, or handoff to the other agent (Codex or Claude Code), and
-  whenever a skill such as ARIS sends work to a reviewer from another model.
-  Its model defaults apply to those calls.
+- Use `yu-skills:cross-check` when YU asks the other agent for an adversarial
+  check or second opinion, and whenever a skill such as ARIS sends work to a
+  reviewer from another model. Its model defaults apply to those calls.
